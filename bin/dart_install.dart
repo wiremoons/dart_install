@@ -2,9 +2,9 @@
 // Copyright 2022 Simon Rowe (simon@wiremoons.com).
 //
 // Build exe with:
-//   dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart
+//   dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install.exe
 // Run with:
-//   dart ./bin/dart_install.dart
+//   dart run
 
 import 'package:args/args.dart';
 import 'package:dart_install/version.dart';
@@ -12,6 +12,6 @@ import 'package:dart_install/version.dart';
 const String applicationVersion = "0.1.0";
 
 void main(List<String> arguments) {
-  var version = Version(appVersion: applicationVersion);
+  final version = Version(appVersion: applicationVersion);
   version.display();
 }

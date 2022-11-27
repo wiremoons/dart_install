@@ -12,17 +12,10 @@ class Version {
   late String _numberCpus;
   late String _systemLocale;
   late String _appLastModifiedOrBuilt;
-  // Add a build time flag:  dart -DDART_BUILD="extra data here" .\cli-args.dart
+  // Add a build time flag: dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart
   static const String _buildEnvData = String.fromEnvironment("DART_BUILD", defaultValue: "");
   static const String _buildMode = bool.fromEnvironment('dart.vm.product') ? "Release" : "Debug";
-
-  // Use any
-  //
-  //static const _buildEnvData = String.fromEnvironment("DART_BUILD", defaultValue: "UNDEFINED");
-
-  // Current build mode
-  //static const _buildMode = bool.fromEnvironment('dart.vm.product') ? "Release" : "Debug";
-  // alternative build mode that needs: import 'package:flutter/foundation.dart';
+  // alternative Flutter build mode needs: import 'package:flutter/foundation.dart';
   //static const _buildMode = (kReleaseMode) ? "Release" : "Debug";
 
   Version({required String appVersion}) {
@@ -72,6 +65,7 @@ class Version {
     Platform.localHostname;
   }
 
+  // for a Dart script or where no '-DDART_BUILD' - get the last modified time stamp
   String _getAppLastModified() {
     // TODO: format data time string before returning
     return "Last modified on: ${File(_getAppFullPath()).lastModifiedSync().toLocal()}";
