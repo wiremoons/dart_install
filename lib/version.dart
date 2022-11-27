@@ -72,7 +72,7 @@ class Version {
   }
 
   void display() {
-    print("""
+    stdout.writeln("""
   '$_appName' is version: '$_appVersion' built in '$_buildMode' mode.
   $_appLastModifiedOrBuilt
   Running Dart version: '$_dartVersion'.
