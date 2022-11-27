@@ -1,4 +1,3 @@
-
 # Dart_Install
 
 Command-line application to install the [Dart SDK](https://dart.dev/get-dart/archive) on a macOS system. Written in the programming [dart language](https://dart.dev/).
