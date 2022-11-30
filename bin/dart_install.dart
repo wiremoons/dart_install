@@ -35,7 +35,7 @@ void main(List<String> arguments) {
   try {
     cliResults = parser.parse(arguments);
   } catch (e) {
-    stderr.writeln("ERROR: unknown exception '{e}'");
+    stderr.writeln("ERROR: unknown exception '${e}'");
     stderr.writeln("${parser.usage}");
     exit(1);
   }
