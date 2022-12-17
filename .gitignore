@@ -5,8 +5,20 @@
 # Conventional directory for build output.
 build/
 
+# recommend to commit for application
+# pubspec.lock
+
 # Editor configs
 .vscode/
+
+# IntelliJ / Webstorm
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Mac
+.DS_Store
 
 # key files
 keys.*
