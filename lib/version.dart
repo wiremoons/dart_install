@@ -1,3 +1,6 @@
+//
+// Copyright 2022 Simon Rowe (simon@wiremoons.com).
+//
 import 'dart:io';
 
 class Version {
