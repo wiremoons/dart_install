@@ -24,7 +24,7 @@ void main(List<String> arguments) {
   parser.addFlag('help',
       abbr: 'h',
       negatable: false,
-      help: 'Display addtional help information.', callback: (help) {
+      help: 'Display additional help information.', callback: (help) {
     if (help) {
       stdout.writeln(
           "\nProgram installs the Dart SDK to the computer it is run from.\n");
