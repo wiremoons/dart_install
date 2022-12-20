@@ -1,6 +1,9 @@
 //
 // Copyright 2022 Simon Rowe (simon@wiremoons.com).
 //
+
+// Disable some specific linting rules in this file only
+// ignore_for_file: unnecessary_brace_in_string_interps
 import 'dart:io';
 
 class Version {
@@ -76,6 +79,7 @@ class Version {
     return "Last modified on: ${File(_getAppFullPath()).lastModifiedSync().toLocal()}";
   }
 
+  // Output the collated data to the screen
   void display() {
     stdout.writeln(
         """\n'$_appName' is version: '$_appVersion' built in '$_buildMode' mode.

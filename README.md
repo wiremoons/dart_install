@@ -1,8 +1,12 @@
 # Dart_Install
 
-Command-line application to install the [Dart SDK](https://dart.dev/get-dart/archive) on a macOS system. Written in the [dart programming language](https://dart.dev/).
+Command-line application to install the [Dart SDK](https://dart.dev/get-dart/
+archive) on a macOS system. Written in the [dart programming language](https://
+dart.dev/).
 
-Project is just to try the language out and see how it fairs for building system management scripts and tools. The task for the tool is not particularly important - it was just the first one I thought of.
+Project is just to try the language out and see how it fairs for building
+system management scripts and tools. The task for the tool is not particularly
+important - it was just the first one I thought of.
 
 
 ## Usage
