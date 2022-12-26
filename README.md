@@ -1,3 +1,5 @@
+[![Dart](https://github.com/wiremoons/dart_install/actions/workflows/dart.yml/badge.svg)](https://github.com/wiremoons/dart_install/actions/workflows/dart.yml)
+
 # Dart_Install
 
 Command-line application to install the [Dart SDK](https://dart.dev/get-dart/
