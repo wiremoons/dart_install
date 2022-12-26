@@ -48,6 +48,7 @@ jobs:
       - name: Run build
         run: |
           echo "Build and run the Dart application"
+          mkdir build
           pwd
           ls -l
           dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install
