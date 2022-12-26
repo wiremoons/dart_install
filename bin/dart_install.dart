@@ -7,8 +7,7 @@
 //   dart run
 
 // Disable some specific linting rules in this file only
-// ignore_for_file: unnecessary_brace_in_string_interps
-
+// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 import 'dart:io';
 import 'package:args/args.dart';
 
@@ -20,7 +19,7 @@ const String applicationVersion = "0.2.0";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();
-  late var cliResults;
+  late ArgResults cliResults;
 
   parser.addFlag('check',
       abbr: 'c',
