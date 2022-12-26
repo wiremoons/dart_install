@@ -44,4 +44,16 @@ jobs:
 
       # Project build: run a build
       - name: Run build
-        run: dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install
+        run: |
+          echo "Build and run the Dart application"
+          pwd
+          ls -l
+          dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install
+          echo "Run the Dart application - show help"
+          ./build/dart_install -h
+          echo "Run the Dart application - show version"
+          ./build/dart_install -v
+          echo "Run the Dart application - run normal"
+          ./build/dart_install
+          echo "DONE"
+          
