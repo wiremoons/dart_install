@@ -71,6 +71,7 @@ void main(List<String> arguments) async {
     sdkver.displayUpgrade();
     exit(0);
   }
+
   // Install or reinstall the latest Dart SDk version
   if (cliResults.wasParsed('install')) {
     final sdkver = SdkVersion();
