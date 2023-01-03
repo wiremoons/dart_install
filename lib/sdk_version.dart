@@ -8,34 +8,43 @@
 // Disable some specific linting rules in this file only
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+import 'dart:core';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' show Client;
 
-// URL for current Dart SDK stable release:
+/// URL for current Dart SDK stable release:
 const String _sdkUrl =
     "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION";
 
-// Values parsed from the Dart SDK JSON web site response data
-// Example returned JSON output:
-// {
-//   "date": "2022-12-13",
-//   "version": "2.18.6",
-//   "revision": "f16b62ea92cc0f04cfd9166992f93419e425c809"
-// }
+/// Parse values from the Dart SDK JSON web site response.
+///
+/// Example returned JSON output:
+/// ```json
+/// {
+///   "date": "2022-12-13",
+///   "version": "2.18.6",
+///   "revision": "f16b62ea92cc0f04cfd9166992f93419e425c809"
+/// }
+/// ```
 class JsonDataModel {
   final String date;
   final String version;
   final String revision;
 
-  // default constructor to parse and extract value needed from JSON input
+  /// Default constructor to parse and extract values needed from JSON input
   JsonDataModel.fromJson(Map<String, dynamic> parsedJson)
       : date = parsedJson['date'],
         version = parsedJson['version'],
         revision = parsedJson['revision'];
 }
 
-// Obtain Dart SDK current stable version from web site and then make data available when requested
+/// Obtain Dart SDK current stable version and local installed version.
+///
+/// From the Dart SDK web site [_sdkUrl] obtain the current stable version
+/// [_sdkVersion], its release date [_sdkDate], and the SDK revision
+/// [_sdkRevision]. The Dart SDK version information is managed via the
+/// [populate] method. Once run the obtained data is made available via getters.
 class SdkVersion {
   late String _sdkVersion;
   late String _sdkDate;
@@ -47,11 +56,11 @@ class SdkVersion {
     _sdkVersion = "";
     _sdkDate = "";
     _sdkRevision = "";
-    _installedVersion = _getInstallSdkVersion();
+    _installedVersion = installedSdk();
   }
 
   // Obtain Dart SDK data and populate SDK info for class variables
-  Future<void> getSdkVersionData() async {
+  Future<void> populate() async {
     await _getSdkJsonData().then((String rawJson) {
       Map<String, dynamic> jsonResponse =
           json.decode(rawJson) as Map<String, dynamic>;
@@ -68,13 +77,50 @@ class SdkVersion {
   get revision => _sdkRevision;
   get installed => _installedVersion;
 
+  // output the current available Dart SDK and the version installed.
+  void displayVersions() {
+    if (_sdkVersion.isNotEmpty && _installedVersion.isNotEmpty) {
+      stdout.writeln("\nDart SDK version status:\n");
+      stdout.writeln("Available: '${_sdkVersion}' [${_sdkDate}]");
+      stdout.writeln("Installed: '${_installedVersion}'");
+    }
+  }
+
+  /// Compare the available SDk version with the installed version to see
+  /// of the strings match.
+  ///
+  /// If the two strings match then assume no upgrade is available.
+  /// If either string is empty assume no upgrade is available.
+  bool _canUpgrade() {
+    if (_sdkVersion.isNotEmpty && _installedVersion.isNotEmpty) {
+      return _sdkVersion == _installedVersion ? false : true;
+    }
+    return false;
+  }
+
+  /// Display information about any possible Dart SDK upgrade.
+  ///
+  /// Uses function [_canUpgrade()] to display an appropriate message about any Dart SDK upgrade
+  /// availability.
+  void displayUpgrade() {
+    if (_canUpgrade()) {
+      stdout.writeln("\n⚠️   Dart SDK upgrade is available.");
+    } else {
+      stdout.writeln("\n✅  Installed Dart SDK is the current version.");
+    }
+  }
+
   // return the current Dart runtime version
-  String _getInstallSdkVersion() {
+  String installedSdk() {
     return Platform.version.split(" ").first;
   }
 
-  // Convert a URL string to a Dart Uri
-  Uri _getSdkUri(String url) {
+  /// Convert a URL string to a Dart URI.
+  ///
+  /// The provided [url] string is  returned as a Dart [Uri]. Program exits
+  /// if the conversion fails, as without a valid URL or URI the  program is
+  /// pointless.
+  Uri _toUri(String url) {
     Uri sdkUri;
     try {
       sdkUri = Uri.parse(url);
@@ -85,11 +131,14 @@ class SdkVersion {
     }
   }
 
-  // Request the web page data for the Dart SDK URL using costs value: `_sdkUrl`
-  // Return the body of the page received as a String.
+  /// Request the JSON data for the Dart SDK URL [_sdkUrl].
+  ///
+  /// Request the JSON data containing the current available stable Dart SDK
+  /// version from the URL [_sdkUrl]. The URL is converted to a URI [_toUri] and the
+  /// web page is requested. Return the body of the page received as a String.
   Future<String> _getSdkJsonData() async {
     Client client = Client();
-    final response = await client.get(_getSdkUri(_sdkUrl));
+    final response = await client.get(_toUri(_sdkUrl));
     if (response.statusCode == 200) {
       client.close();
       return response.body;

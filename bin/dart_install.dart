@@ -13,9 +13,10 @@ import 'package:args/args.dart';
 
 // import local code
 import 'package:dart_install/version.dart';
+import 'package:dart_install/sdk_install.dart';
 import 'package:dart_install/sdk_version.dart';
 
-const String applicationVersion = "0.2.0";
+const String applicationVersion = "0.2.2";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();
@@ -26,6 +27,11 @@ void main(List<String> arguments) async {
       negatable: false,
       defaultsTo: false,
       help: 'Check for new Dart SDK version.');
+  parser.addFlag('install',
+      abbr: 'i',
+      negatable: false,
+      defaultsTo: false,
+      help: 'Install or reinstall the latest Dart SDK.');
   parser.addFlag('version',
       abbr: 'v',
       negatable: false,
@@ -50,16 +56,31 @@ void main(List<String> arguments) async {
     exit(1);
   }
 
+  // display application version information if requested on the command line
   if (cliResults.wasParsed('version')) {
     final version = Version(appVersion: applicationVersion);
     version.display();
     exit(0);
   }
+
+  // display available Dart SDK version and the installed current one
   if (cliResults.wasParsed('check')) {
     final sdkver = SdkVersion();
-    await sdkver.getSdkVersionData();
-    stdout.writeln("Available: '${sdkver.version}' [${sdkver.date}]");
-    stdout.writeln("Installed: '${sdkver.installed}'");
+    await sdkver.populate();
+    sdkver.displayVersions();
+    sdkver.displayUpgrade();
+    exit(0);
   }
+  // Install or reinstall the latest Dart SDk version
+  if (cliResults.wasParsed('install')) {
+    final sdkver = SdkVersion();
+    await sdkver.populate();
+    sdkver.displayVersions();
+    sdkver.displayUpgrade();
+    await upgradeSdk(sdkver.version);
+    exit(0);
+  }
+
+  // no command line options select so just exit the application
   exit(0);
 }
