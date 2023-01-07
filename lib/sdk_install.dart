@@ -8,6 +8,7 @@
 // Disable some specific linting rules in this file only
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+//import 'dart:html';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
@@ -33,8 +34,9 @@ Future<String> dartSdkPath() async {
   final envDartSdkPath = Platform.environment["DART_SDK"];
   if (envDartSdkPath != null && envDartSdkPath.isNotEmpty) {
     // Check the dart exe exists in the sub directory 'bin/'
-    if (await dartExeExists(p.join(envDartSdkPath, "bin"))){
-      stderr.writeln(" [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in a 'bin/' subdirectory");
+    if (await dartExeExists(p.join(envDartSdkPath, "bin"))) {
+      stderr.writeln(
+          " [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in a 'bin/' subdirectory");
     }
     // return what the user set anyway - as they know their computer best...
     return envDartSdkPath;
@@ -55,7 +57,8 @@ Future<String> dartSdkPath() async {
   return "";
 }
 
-/// Confirm is the dart executable exists in the provided directory path [dirPath]
+/// Confirm if the dart executable exists in the provided directory path [dirPath]
+/// Additionally check if executing on Windows so [.exe] can be appended to [dart] first.
 Future<bool> dartExeExists(String dirPath) async {
   // set correct dart executable name as different on Windows
   final dartExe = Platform.isWindows ? "dart.exe" : "dart";
@@ -64,7 +67,19 @@ Future<bool> dartExeExists(String dirPath) async {
   return await dartPath.exists();
 }
 
+/// Provide the path to a directory to download the new Dart SDK install file into.
+/// Will use [$HOME/scratch] by default - will create if it does not exist.
+Future<String> setDownLoadPath() async {
+  final homePath = Platform.environment["HOME"];
+  if (homePath == null || homePath.isEmpty) return "";
+
+  // check for $HOME/scratch - create it if does not exist
+  final downLoadPath = p.join(homePath, "scratch");
+  return downLoadPath;
+}
+
 /// Perform the download and install of the current Dart SDk version.
+/// Requires the current Dart SDK version available is provied to the function as [sdkVersion].
 Future<void> upgradeSdk(String sdkVersion) async {
   stdout.writeln("\nDart SDK installation starting...");
   stdout.writeln(" [*]  Installing Dart SDK version: '${sdkVersion}'");
@@ -73,14 +88,19 @@ Future<void> upgradeSdk(String sdkVersion) async {
     stderr.writeln("\n\n ❌ ERROR: Dart SDK download URL is missing\n");
     return;
   }
+  // set up supporting paths and data before executing
   final String sdkInstallFile = installFileExtract(downLoadUrl);
   final String existingDartSdkPath = await dartSdkPath();
+  final String downLoadFilePath =
+      p.join(await setDownLoadPath(), sdkInstallFile);
   if (existingDartSdkPath.isNotEmpty) {
     // existing Dart SDK found - check with user if should remove first?
     stdout.writeln(
         " [!]  Existing Dart SDK install found: '${existingDartSdkPath}'");
+    // TODO : confirm can remove existing Dart SDK - if not abort.
   }
-  // stdout.writeln(" [*]  Previously downloaded file found - re-using: ${sdkDownloadPath}/${sdkInstallFile}")
   stdout.writeln(" [*]  Dart SDK download URL: ${downLoadUrl}");
   stdout.writeln(" [*]  Dart SDk install file: ${sdkInstallFile}");
+  stdout.writeln(" [*]  Dart SDK download destination: ${downLoadFilePath}");
+  // stdout.writeln(" [*]  Previously downloaded file found - re-using: ${sdkDownloadPath}/${sdkInstallFile}")
 }
