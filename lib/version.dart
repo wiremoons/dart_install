@@ -1,5 +1,5 @@
 //
-// Copyright 2022 Simon Rowe (simon@wiremoons.com).
+// Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
 
 // Disable some specific linting rules in this file only

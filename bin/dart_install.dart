@@ -1,5 +1,5 @@
 //
-// Copyright 2022 Simon Rowe (simon@wiremoons.com).
+// Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
 // Build exe with:
 //   dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install.exe

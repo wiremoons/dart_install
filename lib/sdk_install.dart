@@ -1,10 +1,10 @@
 //
-// Copyright 2022 Simon Rowe (simon@wiremoons.com).
+// Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
-// Install or re-install the current 'stable' Dart SDK version.
-// URL to download the latest macOS arm64 'stable' version is:
-// https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.5/sdk/dartsdk-macos-arm64-release.zip
-//
+/// Install or re-install the current 'stable' Dart SDK version.
+/// URL to download the latest macOS arm64 'stable' version is:
+/// [https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.5/sdk/dartsdk-macos-arm64-release.zip]
+/// where the version shown [2.18.5] will be replaced when the SDK version is updated.
 // Disable some specific linting rules in this file only
 // ignore_for_file: unnecessary_brace_in_string_interps
 
@@ -55,7 +55,7 @@ Future<String> dartSdkPath() async {
 Future<bool> dartExeExits(String dirPath) async {
   // set correct dart executable name as different on Windows
   final dartExe = Platform.isWindows ? "dart.exe" : "dart";
-  // check of the execuatbale exists at the provided path
+  // check of the executable exists at the provided path
   final dartPath = File(p.join(dirPath, dartExe));
   return await dartPath.exists();
 }
@@ -72,7 +72,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
   final String sdkInstallFile = installFileExtract(downLoadUrl);
   final String existingDartSdkPath = await dartSdkPath();
   if (existingDartSdkPath.isNotEmpty) {
-    // exisitng Dart SDK found - check with user if should remove first?
+    // existing Dart SDK found - check with user if should remove first?
     stdout.writeln(
         " [!]  Existing Dart SDK install found: '${existingDartSdkPath}'");
   }
