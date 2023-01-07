@@ -32,7 +32,11 @@ Future<String> dartSdkPath() async {
   // check if 'DART_SDK' is set and exists
   final envDartSdkPath = Platform.environment["DART_SDK"];
   if (envDartSdkPath != null && envDartSdkPath.isNotEmpty) {
-    // TODO: also check the dart exe exists in the sub directory 'bin/'
+    // Check the dart exe exists in the sub directory 'bin/'
+    if (await dartExeExists(p.join(envDartSdkPath, "bin"))){
+      stderr.writeln(" [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in a 'bin/' subdirectory");
+    }
+    // return what the user set anyway - as they know their computer best...
     return envDartSdkPath;
   }
 
@@ -42,7 +46,7 @@ Future<String> dartSdkPath() async {
 
   // check each environment PATH entry for a dart file - return on first found
   for (final path in envPath) {
-    if (await dartExeExits(path)) {
+    if (await dartExeExists(path)) {
       // the dart executable is normally in the Dart SDK 'bin/' sub directory - so trim the path
       final idx = path.lastIndexOf("/bin");
       return idx == -1 ? path : path.substring(0, idx);
@@ -52,7 +56,7 @@ Future<String> dartSdkPath() async {
 }
 
 /// Confirm is the dart executable exists in the provided directory path [dirPath]
-Future<bool> dartExeExits(String dirPath) async {
+Future<bool> dartExeExists(String dirPath) async {
   // set correct dart executable name as different on Windows
   final dartExe = Platform.isWindows ? "dart.exe" : "dart";
   // check of the executable exists at the provided path
