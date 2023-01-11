@@ -5,6 +5,7 @@
 /// URL to download the latest macOS arm64 'stable' version is:
 /// [https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.5/sdk/dartsdk-macos-arm64-release.zip]
 /// where the version shown [2.18.5] will be replaced when the SDK version is updated.
+//
 // Disable some specific linting rules in this file only
 // ignore_for_file: unnecessary_brace_in_string_interps
 
@@ -46,6 +47,8 @@ Future<String> dartSdkPath() async {
   final envPath = Platform.environment["PATH"]?.split(":");
   if (envPath == null || envPath.isEmpty) return "";
 
+  // final path = envPath.firstWhere((path) => await dartExeExists(path), orElse: () => "");
+
   // check each environment PATH entry for a dart file - return on first found
   for (final path in envPath) {
     if (await dartExeExists(path)) {
@@ -75,7 +78,18 @@ Future<String> setDownLoadPath() async {
 
   // check for $HOME/scratch - create it if does not exist
   final downLoadPath = p.join(homePath, "scratch");
+  if (!await Directory(downLoadPath).exists()) {
+    stdout.writeln(" [!]  Creating download directory: '${downLoadPath}'");
+    await Directory(downLoadPath).create(recursive: true);
+  }
   return downLoadPath;
+}
+
+Future<bool> downloadSDk(String downLoadFilePath, String downLoadUrl) async {
+  final request = await HttpClient().getUrl(Uri.parse(downLoadUrl));
+  final response = await request.close();
+  response.pipe(File(downLoadFilePath).openWrite());
+  return true;
 }
 
 /// Perform the download and install of the current Dart SDk version.
@@ -103,4 +117,9 @@ Future<void> upgradeSdk(String sdkVersion) async {
   stdout.writeln(" [*]  Dart SDk install file: ${sdkInstallFile}");
   stdout.writeln(" [*]  Dart SDK download destination: ${downLoadFilePath}");
   // stdout.writeln(" [*]  Previously downloaded file found - re-using: ${sdkDownloadPath}/${sdkInstallFile}")
+  if (!await downloadSDk(downLoadFilePath, downLoadUrl)) {
+    stderr.writeln("\n\n ❌ ERROR: Dart SDK download failed\n");
+    return;
+  }
+  stdout.writeln(" [✓]  Dart SDK download completed successfully");
 }
