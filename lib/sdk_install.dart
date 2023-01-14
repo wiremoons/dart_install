@@ -85,10 +85,15 @@ Future<String> setDownLoadPath() async {
   return downLoadPath;
 }
 
+/// Download the file at provided URL [downLoadUrl] to the local file path and name
+/// provided as [downLoadFilePath]. Any exisitng file at [downLoadFilePath] will be
+/// over written without checking. Returns [true] when completed.
 Future<bool> downloadSDk(String downLoadFilePath, String downLoadUrl) async {
   final request = await HttpClient().getUrl(Uri.parse(downLoadUrl));
   final response = await request.close();
-  response.pipe(File(downLoadFilePath).openWrite());
+  stdout.write(" -->  Downloading Dart SDK install file... please wait");
+  await response.pipe(File(downLoadFilePath).openWrite());
+  stdout.write("\r                                                      \r");
   return true;
 }
 
