@@ -9,7 +9,7 @@
 // Disable some specific linting rules in this file only
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-//import 'dart:html';
+import 'dart:math';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
@@ -97,6 +97,14 @@ Future<bool> downloadSDk(String downLoadFilePath, String downLoadUrl) async {
   return true;
 }
 
+Future<String> getFileSize(String filePath, int displayDecimals) async {
+  int bytes = await File(filePath).length();
+  if (bytes <= 0) return "0 B";
+  const sizeSuffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  var i = (log(bytes) / log(1024)).floor();
+  return "${(bytes / pow(1024, i)).toStringAsFixed(displayDecimals)} ${sizeSuffixes[i]}";
+}
+
 /// Perform the download and install of the current Dart SDk version.
 /// Requires the current Dart SDK version available is provied to the function as [sdkVersion].
 Future<void> upgradeSdk(String sdkVersion) async {
@@ -121,10 +129,17 @@ Future<void> upgradeSdk(String sdkVersion) async {
   stdout.writeln(" [*]  Dart SDK download URL: ${downLoadUrl}");
   stdout.writeln(" [*]  Dart SDk install file: ${sdkInstallFile}");
   stdout.writeln(" [*]  Dart SDK download destination: ${downLoadFilePath}");
-  // stdout.writeln(" [*]  Previously downloaded file found - re-using: ${sdkDownloadPath}/${sdkInstallFile}")
-  if (!await downloadSDk(downLoadFilePath, downLoadUrl)) {
-    stderr.writeln("\n\n ❌ ERROR: Dart SDK download failed\n");
-    return;
+  // check for an existing downloaded file - use if exists otherwise download new.
+  if (await File(downLoadFilePath).exists()) {
+    stdout.writeln(
+        " [!]  Re-using found previously downloaded file: ${downLoadFilePath}");
+  } else {
+    if (!await downloadSDk(downLoadFilePath, downLoadUrl)) {
+      stderr.writeln("\n\n ❌ ERROR: Dart SDK download failed\n");
+      return;
+    }
+    stdout.writeln(" [✓]  Dart SDK download completed successfully");
   }
-  stdout.writeln(" [✓]  Dart SDK download completed successfully");
+  stdout.writeln(
+      " [*]  Dart SDK download file size: ${await getFileSize(downLoadFilePath, 1)}");
 }
