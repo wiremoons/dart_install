@@ -17,7 +17,7 @@ check_status () {
   return
 }
 
-printf "\n\nBuilding 'dart_install'...\n\n"
+printf "\n\n [*]  Building 'dart_install'...\n\n"
 dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install
 check_status
-printf "\nbuild completed - see ./build/dart_install\n"
+printf "\n [✔]  Build completed.  Run: ./build/dart_install\n"
