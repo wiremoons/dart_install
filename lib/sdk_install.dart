@@ -138,7 +138,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
       stderr.writeln("\n\n ❌ ERROR: Dart SDK download failed\n");
       return;
     }
-    stdout.writeln(" [✓]  Dart SDK download completed successfully");
+    stdout.writeln(" [✔]  Dart SDK download completed successfully");
   }
   stdout.writeln(
       " [*]  Dart SDK download file size: ${await getFileSize(downLoadFilePath, 1)}");
