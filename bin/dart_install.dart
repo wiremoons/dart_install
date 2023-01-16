@@ -45,14 +45,15 @@ void main(List<String> arguments) async {
       stdout.writeln(
           "\nProgram installs the Dart SDK to the computer it is run from.\n");
       stdout.writeln("Usage:\n${parser.usage}\n");
+      exit(0);
     }
   });
 
   try {
     cliResults = parser.parse(arguments);
   } catch (e) {
-    stderr.writeln("ERROR: unknown exception '${e}'");
-    stderr.writeln("${parser.usage}");
+    stderr.writeln("\nERROR: unknown exception '${e}'");
+    stderr.writeln("\nValid options are:\n${parser.usage}");
     exit(1);
   }
 
@@ -82,6 +83,15 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  // no command line options select so just exit the application
+  // managed any unexpected addtional arguments
+  if (cliResults.rest.isNotEmpty) {
+    stderr.writeln(
+        "\nERROR: no command matches input: '${cliResults.rest.toString()}'");
+    stderr.writeln("\nValid options are:\n${parser.usage}");
+    exit(2);
+  }
+
+  // no command line options selected so just exit the application
+  stderr.writeln("\nValid options are:\n${parser.usage}");
   exit(0);
 }
