@@ -19,9 +19,14 @@ String createDownLoadUrl(String sdkVersion) {
   return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-macos-arm64-release.zip";
 }
 
-/// Get the name of the downloaded file from the [downLoadUrl] created via the [createDownLoadUrl()] function
-String installFileExtract(String downLoadUrl) {
-  return downLoadUrl.isEmpty ? downLoadUrl : p.basename(downLoadUrl);
+/// Get the name of the downloaded file from the [downLoadUrl] created via the [createDownLoadUrl()] function.
+/// Uses [basenameWithoutExtension] to extract just the filename (no extension) from the end of the [downLoadUrl]. The
+/// version of the SDK being obtained is then appended, and the '.zip' added back on the end to complete the
+/// whole filename construct.
+String installFileNameExtract(String downLoadUrl, String sdkVersion) {
+  return downLoadUrl.isEmpty
+      ? downLoadUrl
+      : ("${p.basenameWithoutExtension(downLoadUrl)}-${sdkVersion}.zip");
 }
 
 /// Locate the full path to the local Dart SDK installation
@@ -116,7 +121,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
     return;
   }
   // set up supporting paths and data before executing
-  final String sdkInstallFile = installFileExtract(downLoadUrl);
+  final String sdkInstallFile = installFileNameExtract(downLoadUrl, sdkVersion);
   final String existingDartSdkPath = await dartSdkPath();
   final String downLoadFilePath =
       p.join(await setDownLoadPath(), sdkInstallFile);
