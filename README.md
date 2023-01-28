@@ -22,6 +22,11 @@ change into the cloned directory:
 cd dart_install
 ```
 
+update required supporting packages:
+```console
+dart pub update
+```
+
 To execute the program as a script:
 ```dart
 dart run
