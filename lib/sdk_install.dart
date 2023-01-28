@@ -11,6 +11,8 @@
 
 import 'dart:math';
 import 'dart:io';
+import 'yesno.dart';
+import 'unzip.dart';
 import 'package:path/path.dart' as p;
 
 /// Create a the Dart SDK download URL for the current version specific to macOS arm64 install.
@@ -19,10 +21,12 @@ String createDownLoadUrl(String sdkVersion) {
   return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-macos-arm64-release.zip";
 }
 
-/// Get the name of the downloaded file from the [downLoadUrl] created via the [createDownLoadUrl()] function.
-/// Uses [basenameWithoutExtension] to extract just the filename (no extension) from the end of the [downLoadUrl]. The
-/// version of the SDK being obtained is then appended, and the '.zip' added back on the end to complete the
-/// whole filename construct.
+/// Construct the local file name to be used to identify the downloaded Dart SDK install zip file.
+///
+/// Get the name of the file from the [downLoadUrl] created via the [createDownLoadUrl()] function.
+/// Uses the 'path package' function [basenameWithoutExtension] to extract just the filename (no extension) from
+/// the end of the [downLoadUrl]. The version of the SDK being obtained is then appended, and the '.zip' added
+/// back on the end to complete the whole filename construct.
 String installFileNameExtract(String downLoadUrl, String sdkVersion) {
   return downLoadUrl.isEmpty
       ? downLoadUrl
@@ -90,6 +94,21 @@ Future<String> setDownLoadPath() async {
   return downLoadPath;
 }
 
+/// Provide the path to a directory to extract and install the new Dart SDK archive file into.
+/// Will use [$HOME/.dart] by default - will create if it does not exist.
+Future<String> setSdkInstallDir() async {
+  final homePath = Platform.environment["HOME"];
+  if (homePath == null || homePath.isEmpty) return "";
+
+  // check for $HOME/.dart - create it if does not exist
+  final destSdkDirectory = p.join(homePath, ".dart");
+  if (!await Directory(destSdkDirectory).exists()) {
+    stdout.writeln(" [!]  Creating download directory: '${destSdkDirectory}'");
+    await Directory(destSdkDirectory).create(recursive: true);
+  }
+  return destSdkDirectory;
+}
+
 /// Download the file at provided URL [downLoadUrl] to the local file path and name
 /// provided as [downLoadFilePath]. Any exisitng file at [downLoadFilePath] will be
 /// over written without checking. Returns [true] when completed.
@@ -102,7 +121,12 @@ Future<bool> downloadSDk(String downLoadFilePath, String downLoadUrl) async {
   return true;
 }
 
+/// Show the size of a file with the correct suffix such as 'MB' or 'GB' etc
+//
+// For the provided filename and path check the file size and return it as a String
+// with an appended suffix to reflect if it is 'MB', 'TB', etc.
 Future<String> getFileSize(String filePath, int displayDecimals) async {
+  // TODO: check for non existant file scenario before checking it length?
   int bytes = await File(filePath).length();
   if (bytes <= 0) return "0 B";
   const sizeSuffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
@@ -122,6 +146,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
   }
   // set up supporting paths and data before executing
   final String sdkInstallFile = installFileNameExtract(downLoadUrl, sdkVersion);
+  final String destSdkDirectory = await setSdkInstallDir();
   final String existingDartSdkPath = await dartSdkPath();
   final String downLoadFilePath =
       p.join(await setDownLoadPath(), sdkInstallFile);
@@ -129,10 +154,25 @@ Future<void> upgradeSdk(String sdkVersion) async {
     // existing Dart SDK found - check with user if should remove first?
     stdout.writeln(
         " [!]  Existing Dart SDK install found: '${existingDartSdkPath}'");
-    // TODO : confirm can remove existing Dart SDK - if not abort.
+    if (yesNo(question: "Remove exising Dart SDK installation")) {
+      stdout.writeln(" [*]  Deleting: ${existingDartSdkPath}");
+      try {
+        Directory(existingDartSdkPath).deleteSync(recursive: true);
+        stdout.writeln(" [✔]  Removal successful.");
+      } catch (err) {
+        stderr.writeln(
+            "\n\n ❌ ERROR: unable to remove Dart SDK directory: '${err}'.\n\n");
+        return;
+      }
+    } else {
+      stderr.writeln(
+          "\n ❌ ERROR: unable to upgrade as existing Dart SDK install exists.\n\n");
+      return;
+    }
   }
   stdout.writeln(" [*]  Dart SDK download URL: ${downLoadUrl}");
   stdout.writeln(" [*]  Dart SDk install file: ${sdkInstallFile}");
+  stdout.writeln(" [*]  Dart SDk install directory: ${destSdkDirectory}");
   stdout.writeln(" [*]  Dart SDK download destination: ${downLoadFilePath}");
   // check for an existing downloaded file - use if exists otherwise download new.
   if (await File(downLoadFilePath).exists()) {
@@ -145,6 +185,20 @@ Future<void> upgradeSdk(String sdkVersion) async {
     }
     stdout.writeln(" [✔]  Dart SDK download completed successfully");
   }
+  // get the download files size and display it for info
   stdout.writeln(
       " [*]  Dart SDK download file size: ${await getFileSize(downLoadFilePath, 1)}");
+
+  // start the unarchiving process
+  stdout.writeln(
+      " [*]  Unachiving downloaded Dart SDK to destination: ${destSdkDirectory}");
+  // if (!await unzipArchive(downLoadFilePath, destSdkDirectory)) {
+  if (!unzipArchive2(downLoadFilePath, destSdkDirectory)) {
+    stderr.writeln("\n\n ❌ ERROR: Dart SDK unarchive process failed\n");
+    return;
+  }
+  stdout.writeln(" [✔]  Dart SDK unarchive completed successfully");
+  // TODO : fix file permisions on 'dart-sdk/bin/*' and 'dart-sdk/utils/*' to chmod 755
+  // TODO : get Dart SDK version installed from the version number stated in 'dart-sdk/version' not
+  // the complied wiht version as is shown at the moment - as that wont chnage for the app
 }
