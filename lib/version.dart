@@ -89,17 +89,3 @@ Executing on computer '$_computerName' with '$_osName $_osVersion' with $_number
 System locale is '$_systemLocale'.""");
   }
 }
-
-// dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart
-// dart compile exe -DDART_BUILD="$(echo git rev-parse HEAD)" ./bin/dart_install.dart
-
-// // Utility used by Version class methods
-// extension StringExtension on String {
-//   String toCapitaliseOS(String input) {
-//   if (input.isEmpty) return input;
-//   if (input.contains("macos")) {
-//   return input.substring(0,3) + input.substring(3,input.length).toUpperCase();
-//   }
-//   return input[0].toUpperCase() + input.substring(1);
-//   }
-// }
