@@ -66,7 +66,7 @@ class Version {
         : Platform.resolvedExecutable;
   }
 
-  // removes the '.local' on macos from the hostname
+  // removes the '.local' included with a macOS hostname
   String _getComputerName() {
     return (Platform.localHostname.endsWith(".local"))
         ? Platform.localHostname.split(".").first
