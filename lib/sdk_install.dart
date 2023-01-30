@@ -219,9 +219,6 @@ Future<void> upgradeSdk(String sdkVersion) async {
     return;
   }
   stdout.writeln(" [✔]  Dart SDK unarchive completed successfully");
-  // TODO : fix file permisions on 'dart-sdk/bin/*' and 'dart-sdk/utils/*' to chmod 755
-  // TODO : get Dart SDK version installed from the version number stated in 'dart-sdk/version' not
-  // the complied wiht version as is shown at the moment - as that wont chnage for the app
   stdout.writeln(" [*]  Setting correct file permissions for unarchived files");
   await makeExecutable(File(p.join(destSdkDirectory, "dart-sdk/bin/dart")));
   await makeExecutable(

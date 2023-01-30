@@ -82,7 +82,8 @@ class SdkVersion {
     if (_sdkVersion.isNotEmpty && _installedVersion.isNotEmpty) {
       stdout.writeln("\nDart SDK version status:\n");
       stdout.writeln("Available: '${_sdkVersion}' [${_sdkDate}]");
-      stdout.writeln("Installed: '${_installedVersion}'");
+      stdout.writeln("Installed: 'UNKOWN'");
+      stdout.writeln("Executing: '${_installedVersion}'");
     }
   }
 
