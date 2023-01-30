@@ -51,13 +51,14 @@ Future<String> dartSdkPath() async {
     // return what the user set anyway - as they know their computer best...
     return envDartSdkPath;
   }
-
+  //
+  // DART_SDK env failed!
   // check the environment PATH for 'dart' or 'dart.exe' file
   final envPath = Platform.environment["PATH"]?.split(":");
   if (envPath == null || envPath.isEmpty) return "";
-
+  //
   // final path = envPath.firstWhere((path) => await dartExeExists(path), orElse: () => "");
-
+  //
   // check each environment PATH entry for a dart file - return on first found
   for (final path in envPath) {
     if (await dartExeExists(path)) {
@@ -84,7 +85,7 @@ Future<bool> dartExeExists(String dirPath) async {
 Future<String> setDownLoadPath() async {
   final homePath = Platform.environment["HOME"];
   if (homePath == null || homePath.isEmpty) return "";
-
+  //
   // check for $HOME/scratch - create it if does not exist
   final downLoadPath = p.join(homePath, "scratch");
   if (!await Directory(downLoadPath).exists()) {
@@ -99,7 +100,7 @@ Future<String> setDownLoadPath() async {
 Future<String> setSdkInstallDir() async {
   final homePath = Platform.environment["HOME"];
   if (homePath == null || homePath.isEmpty) return "";
-
+  //
   // check for $HOME/.dart - create it if does not exist
   final destSdkDirectory = p.join(homePath, ".dart");
   if (!await Directory(destSdkDirectory).exists()) {
@@ -133,6 +134,12 @@ Future<String> getFileSize(String filePath, int displayDecimals) async {
   var i = (log(bytes) / log(1024)).floor();
   return "${(bytes / pow(1024, i)).toStringAsFixed(displayDecimals)} ${sizeSuffixes[i]}";
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//                   sdk_install.dart - main function
+//
+///////////////////////////////////////////////////////////////////////////////
 
 /// Perform the download and install of the current Dart SDk version.
 /// Requires the current Dart SDK version available is provied to the function as [sdkVersion].
