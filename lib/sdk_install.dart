@@ -33,6 +33,20 @@ String installFileNameExtract(String downLoadUrl, String sdkVersion) {
       : ("${p.basenameWithoutExtension(downLoadUrl)}-${sdkVersion}.zip");
 }
 
+/// Chnage the files to have execuatble permission as 755
+///
+/// Dart has no ability to change a file permissions so the Unix command line program `chmod` is called
+/// instead. The provided [file] has its permissions set to `755`.
+Future<void> makeExecutable(File file) async {
+  if (!Platform.isWindows) {
+    ProcessResult result = await Process.run("chmod", ["755", file.path]);
+    if (result.exitCode != 0) {
+      stderr.writeln(
+          "\n\n ❌ ERROR: failed to set execute file permssions for file: '${file}' due to: '${result.stderr}'");
+    }
+  }
+}
+
 /// Locate the full path to the local Dart SDK installation
 ///
 /// Check if the [DART_SDK] environment variable is set which can be used to identify the installed
@@ -208,4 +222,11 @@ Future<void> upgradeSdk(String sdkVersion) async {
   // TODO : fix file permisions on 'dart-sdk/bin/*' and 'dart-sdk/utils/*' to chmod 755
   // TODO : get Dart SDK version installed from the version number stated in 'dart-sdk/version' not
   // the complied wiht version as is shown at the moment - as that wont chnage for the app
+  stdout.writeln(" [*]  Setting correct file permissions for unarchived files");
+  await makeExecutable(File(p.join(destSdkDirectory, "dart-sdk/bin/dart")));
+  await makeExecutable(
+      File(p.join(destSdkDirectory, "dart-sdk/bin/dartaotruntime")));
+  await makeExecutable(
+      File(p.join(destSdkDirectory, "dart-sdk/bin/utils/gen_snapshot")));
+  stdout.writeln(" [✔]  Installation of Dart SDK completed.\n");
 }
