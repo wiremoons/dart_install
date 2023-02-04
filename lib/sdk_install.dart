@@ -31,26 +31,26 @@ String installFileNameExtract(String downLoadUrl, String sdkVersion) {
       : ("${p.basenameWithoutExtension(downLoadUrl)}-${sdkVersion}.zip");
 }
 
-/// Chnage the files to have execuatble permission as 755
+/// Change installed Dart SDK files to have executable permission as: 755.
 ///
 /// Dart has no ability to change a file permissions so the Unix command line program `chmod` is called
-/// instead. The provided [file] has its permissions set to `755`.
+/// instead. The provided [file] name has its permissions set to `755`.
 Future<void> makeExecutable(File file) async {
   if (!Platform.isWindows) {
     ProcessResult result = await Process.run("chmod", ["755", file.path]);
     if (result.exitCode != 0) {
       stderr.writeln(
-          "\n\n ❌ ERROR: failed to set execute file permssions for file: '${file}' due to: '${result.stderr}'");
+          "\n\n ❌ ERROR: failed to set execute file permissions for file: '${file}' due to: '${result.stderr}'");
     }
   }
 }
 
-/// Locate the full path to the local Dart SDK installation
+/// Locate the full path to the local Dart SDK installation.
 ///
 /// Check if the [DART_SDK] environment variable is set which can be used to identify the installed
-/// Dart SDK location. If this exists it is used as it has been manually set, so should be good.
-/// If no [DART_SDK] env exists, then search the PATH environment for the *dart* or *dart.exe* which if
-/// available should be in the Dart SDK *bin/* sub directory.
+/// Dart SDK location. If this exists it is used as it will have been manually set, so should be good.
+/// If no [DART_SDK] env exists, then search the [PATH] environment for the *dart* or *dart.exe* files
+/// which if available, should be in the Dart SDK *bin/* sub directory.
 Future<String> dartSdkPath() async {
   // check if 'DART_SDK' is set and exists
   final envDartSdkPath = Platform.environment["DART_SDK"];
@@ -63,9 +63,8 @@ Future<String> dartSdkPath() async {
     // return what the user set anyway - as they know their computer best...
     return envDartSdkPath;
   }
-  //
-  // DART_SDK env failed!
-  // check the environment PATH for 'dart' or 'dart.exe' file
+  // Finding [DART_SDK] env failed!
+  // check the environment [PATH] for 'dart' or 'dart.exe' file
   final envPath = Platform.environment["PATH"]?.split(":");
   if (envPath == null || envPath.isEmpty) return "";
   //
@@ -82,6 +81,8 @@ Future<String> dartSdkPath() async {
   return "";
 }
 
+/// Check the provided [dirPath] for a file named *dart.exe* or *dart*.
+///
 /// Confirm if the dart executable exists in the provided directory path [dirPath]
 /// Additionally check if executing on Windows so [.exe] can be appended to [dart] first.
 Future<bool> dartExeExists(String dirPath) async {
@@ -92,8 +93,10 @@ Future<bool> dartExeExists(String dirPath) async {
   return await dartPath.exists();
 }
 
-/// Provide the path to a directory to download the new Dart SDK install file into.
-/// Will use [$HOME/scratch] by default - will create if it does not exist.
+/// Identify a suitable directory to download and save the Dart SDK archive file too.
+///
+/// Return the path to a directory to download the new Dart SDK install file into.
+/// Will use [$HOME/scratch] by default - will create it if it does not exist.
 Future<String> setDownLoadPath() async {
   final homePath = Platform.environment["HOME"];
   if (homePath == null || homePath.isEmpty) return "";
@@ -107,6 +110,8 @@ Future<String> setDownLoadPath() async {
   return downLoadPath;
 }
 
+/// Check for and create if needed the Dart SDK install location of [HOME/.dart].
+///
 /// Provide the path to a directory to extract and install the new Dart SDK archive file into.
 /// Will use [$HOME/.dart] by default - will create if it does not exist.
 Future<String> setSdkInstallDir() async {
@@ -122,16 +127,24 @@ Future<String> setSdkInstallDir() async {
   return destSdkDirectory;
 }
 
+/// Download the file at the URL [downLoadUrl] to the local path [downLoadFilePath].
+///
 /// Download the file at provided URL [downLoadUrl] to the local file path and name
-/// provided as [downLoadFilePath]. Any exisitng file at [downLoadFilePath] will be
+/// provided as [downLoadFilePath]. Any existing file at [downLoadFilePath] will be
 /// over written without checking. Returns [true] when completed.
 Future<bool> downloadSDk(String downLoadFilePath, String downLoadUrl) async {
-  final request = await HttpClient().getUrl(Uri.parse(downLoadUrl));
-  final response = await request.close();
-  stdout.write(" -->  Downloading Dart SDK install file... please wait");
-  await response.pipe(File(downLoadFilePath).openWrite());
-  stdout.write("\r                                                      \r");
-  return true;
+  try {
+    final request = await HttpClient().getUrl(Uri.parse(downLoadUrl));
+    final response = await request.close();
+    stdout.write(" -->  Downloading Dart SDK install file... please wait");
+    await response.pipe(File(downLoadFilePath).openWrite());
+    stdout.write("\r                                                      \r");
+    return true;
+  } catch (e) {
+    stderr.writeln(
+        "\n\n ❌ ERROR: failed to download file: '${downLoadUrl}' due to: '${e}'");
+    return false;
+  }
 }
 
 /// Show the size of a file with the correct suffix such as 'MB' or 'GB' etc
@@ -153,8 +166,10 @@ Future<String> getFileSize(String filePath, int displayDecimals) async {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-/// Perform the download and install of the current Dart SDk version.
-/// Requires the current Dart SDK version available is provied to the function as [sdkVersion].
+/// Main function to download and install a new Dart SDK.
+///
+/// Perform the download and install of the current 'stable' Dart SDk version.
+/// Requires the current Dart SDK version available is provided to the function as [sdkVersion].
 Future<void> upgradeSdk(String sdkVersion) async {
   stdout.writeln("\nDart SDK installation starting...");
   stdout.writeln(" [*]  Installing Dart SDK version: '${sdkVersion}'");
@@ -210,7 +225,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
 
   // start the unarchiving process
   stdout.writeln(
-      " [*]  Unachiving downloaded Dart SDK to destination: ${destSdkDirectory}");
+      " [*]  Unarchiving downloaded Dart SDK to destination: ${destSdkDirectory}");
   // if (!await unzipArchive(downLoadFilePath, destSdkDirectory)) {
   if (!unzipArchive2(downLoadFilePath, destSdkDirectory)) {
     stderr.writeln("\n\n ❌ ERROR: Dart SDK unarchive process failed\n");
