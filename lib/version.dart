@@ -35,7 +35,31 @@ class Version {
         (_buildEnvData.isNotEmpty) ? _buildEnvData : _getAppLastModified();
   }
 
-  // formats operating system name
+  /// Output the collated version data to the screen.
+  void display() {
+    stdout.writeln(
+        """\n'$_appName' is version: '$_appVersion' built in '$_buildMode' mode.
+$_appLastModifiedOrBuilt
+Running Dart version: '$_dartVersion'.
+Executing on computer '$_computerName' with '$_osName $_osVersion' with $_numberCpus CPUs.
+System locale is '$_systemLocale'.""");
+  }
+
+  /// Return the collated data as a formatted string.
+  String asString() {
+    return
+        """\n'$_appName' is version: '$_appVersion' built in '$_buildMode' mode.
+$_appLastModifiedOrBuilt
+Running Dart version: '$_dartVersion'.
+Executing on computer '$_computerName' with '$_osName $_osVersion' with $_numberCpus CPUs.
+System locale is '$_systemLocale'.""";
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  //              PRIVATE CLASS METHODS BELOW
+  /////////////////////////////////////////////////////////////////////////////
+
+  // formats operating system name with leading capital letter or as 'macOS'.
   String _toCapitaliseOS(String input) {
     if (input.isEmpty) return input;
     if (input.contains("macos")) {
@@ -45,26 +69,26 @@ class Version {
     return input[0].toUpperCase() + input.substring(1);
   }
 
-  // check if running as a script or from a compiled exe
+  // check if running program is a script or from a AOT compiled exectable.
   bool _isScript() {
     return (Platform.executable.endsWith("dart")) ? true : false;
   }
 
-  // provide application name (exe) or filename (script)
+  // provide application name (exe) or filename (script).
   String _getAppName() {
     return (_isScript())
         ? Platform.script.pathSegments.last
         : Platform.resolvedExecutable.split("/").last;
   }
 
-  // applications full path and name (exe) or full path and filename (script)
+  // applications full path and name (exe) or full path and filename (script).
   String _getAppFullPath() {
     return (_isScript())
         ? Platform.script.toFilePath()
         : Platform.resolvedExecutable;
   }
 
-  // removes the '.local' included with a macOS hostname
+  // removes the '.local' included with a macOS hostname.
   String _getComputerName() {
     return (Platform.localHostname.endsWith(".local"))
         ? Platform.localHostname.split(".").first
@@ -77,13 +101,4 @@ class Version {
     return "Last modified on: ${File(_getAppFullPath()).lastModifiedSync().toLocal()}";
   }
 
-  // Output the collated data to the screen
-  void display() {
-    stdout.writeln(
-        """\n'$_appName' is version: '$_appVersion' built in '$_buildMode' mode.
-$_appLastModifiedOrBuilt
-Running Dart version: '$_dartVersion'.
-Executing on computer '$_computerName' with '$_osName $_osVersion' with $_numberCpus CPUs.
-System locale is '$_systemLocale'.""");
-  }
 }

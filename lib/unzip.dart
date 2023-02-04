@@ -7,7 +7,7 @@ import 'package:archive/archive_io.dart';
 
 /// Unzip the file [downLoadFilePath] to the local directory [destSdkDirectory].
 ///
-/// Both the source [downLoadFilePath] and desitination [destSdkDirectory] need to exist.
+/// Both the source [downLoadFilePath] and destination [destSdkDirectory] need to exist.
 bool unzipArchive2(String downLoadFilePath, String destSdkDirectory) {
   // Read the Zip file from disk.
   final bytes = File(downLoadFilePath).readAsBytesSync();
@@ -36,7 +36,7 @@ bool unzipArchive2(String downLoadFilePath, String destSdkDirectory) {
 
 /// Unzip the file [downLoadFilePath] to the local directory [destSdkDirectory].
 ///
-/// Both the source [downLoadFilePath] and desitination [destSdkDirectory] need to exist.
+/// Both the source [downLoadFilePath] and destination [destSdkDirectory] need to exist.
 Future<bool> unzipArchive(
     String downLoadFilePath, String destSdkDirectory) async {
   stdout.write(" -->  Extracting Dart SDK install file... please wait");

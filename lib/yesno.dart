@@ -5,7 +5,7 @@
 /// Returns: a boolean where user response is: true == yes || false == no
 /// Description: the question string is printed to the screen so the
 /// user can respond with a 'yes' or 'no' response. Accepts different
-/// forms of 'yes' or 'no' to suit the user prefered approach to
+/// forms of 'yes' or 'no' to suit the user preferred approach to
 /// answering.
 //
 
