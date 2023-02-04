@@ -117,8 +117,7 @@ class SdkVersion {
   /// Convert a URL string to a Dart URI.
   ///
   /// The provided [url] string is  returned as a Dart [Uri]. Program exits
-  /// if the conversion fails, as without a valid URL or URI the  program is
-  /// pointless.
+  /// if the conversion fails.
   Uri _toUri(String url) {
     Uri sdkUri;
     try {
