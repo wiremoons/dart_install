@@ -10,6 +10,7 @@ import 'dart:core';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' show Client;
+import 'package:path/path.dart' as p;
 
 /// URL for current Dart SDK stable release:
 const String _sdkUrl =
@@ -47,6 +48,7 @@ class SdkVersion {
   late String _sdkVersion;
   late String _sdkDate;
   late String _sdkRevision;
+  late String _executingVersion;
   late String _installedVersion;
   // Map<String, dynamic> jsonResponse = {};
 
@@ -54,7 +56,8 @@ class SdkVersion {
     _sdkVersion = "";
     _sdkDate = "";
     _sdkRevision = "";
-    _installedVersion = installedSdk();
+    _installedVersion = "";
+    _executingVersion = executingSdk();
   }
 
   // Obtain Dart SDK data and populate SDK info for class variables
@@ -67,21 +70,22 @@ class SdkVersion {
       _sdkDate = sdkData.date;
       _sdkRevision = sdkData.revision;
     });
+    _installedVersion = await installedSdk();
   }
 
   // return the stored Dart SDK values
   get version => _sdkVersion;
   get date => _sdkDate;
   get revision => _sdkRevision;
-  get installed => _installedVersion;
+  get installed => _executingVersion;
 
   // output the current available Dart SDK and the version installed.
   void displayVersions() {
-    if (_sdkVersion.isNotEmpty && _installedVersion.isNotEmpty) {
+    if (_sdkVersion.isNotEmpty && _executingVersion.isNotEmpty) {
       stdout.writeln("\nDart SDK version status:\n");
       stdout.writeln("Available: '${_sdkVersion}' [${_sdkDate}]");
-      stdout.writeln("Installed: 'UNKOWN'");
-      stdout.writeln("Executing: '${_installedVersion}'");
+      stdout.writeln("Installed: '${_installedVersion}'");
+      stdout.writeln("Executing: '${_executingVersion}'");
     }
   }
 
@@ -91,6 +95,9 @@ class SdkVersion {
   /// If the two strings match then assume no upgrade is available.
   /// If either string is empty assume no upgrade is available.
   bool _canUpgrade() {
+    if (_installedVersion == "Not Found") {
+      return false;
+    }
     if (_sdkVersion.isNotEmpty && _installedVersion.isNotEmpty) {
       return _sdkVersion == _installedVersion ? false : true;
     }
@@ -110,8 +117,75 @@ class SdkVersion {
   }
 
   // return the current Dart runtime version
-  String installedSdk() {
+  String executingSdk() {
     return Platform.version.split(" ").first;
+  }
+
+  // return the version of any installed Dart SDK or 'Not Found'
+  Future<String> installedSdk() async {
+    String installedSdkPath = await _dartSdkPath();
+    if (installedSdkPath.isEmpty) {
+      return "Not Found";
+    }
+    // Have Dart SDK location - check for 'version' file
+    final dartSdkVersionFile = File(p.join(installedSdkPath, "version"));
+    if (!await dartSdkVersionFile.exists()) {
+      return "Not Found";
+    }
+    try {
+      String sdkVersion = await (dartSdkVersionFile.readAsString());
+      return sdkVersion.replaceAll("\n", "");
+    } catch (e) {
+      stderr.writeln('failed to read file: \n${e}');
+      return "Not Found";
+    }
+  }
+
+  /// Locate the full path to the local Dart SDK installation
+  ///
+  /// Check if the [DART_SDK] environment variable is set which can be used to identify the installed
+  /// Dart SDK location. If this exists it is used as it has been manually set, so should be good.
+  /// If no [DART_SDK] env exists, then search the PATH environment for the *dart* or *dart.exe* which if
+  /// available should be in the Dart SDK *bin/* sub directory.
+  Future<String> _dartSdkPath() async {
+    // check if 'DART_SDK' is set and exists
+    final envDartSdkPath = Platform.environment["DART_SDK"];
+    if (envDartSdkPath != null && envDartSdkPath.isNotEmpty) {
+      // Check the dart exe exists in the sub directory 'bin/'
+      if (await _dartExeExists(p.join(envDartSdkPath, "bin"))) {
+        stderr.writeln(
+            " [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in a 'bin/' subdirectory");
+      }
+      // return what the user set anyway - as they know their computer best...
+      return envDartSdkPath;
+    }
+    //
+    // DART_SDK env failed!
+    // check the environment PATH for 'dart' or 'dart.exe' file
+    final envPath = Platform.environment["PATH"]?.split(":");
+    if (envPath == null || envPath.isEmpty) return "";
+    //
+    // final path = envPath.firstWhere((path) => await _dartExeExists(path), orElse: () => "");
+    //
+    // check each environment PATH entry for a dart file - return on first found
+    for (final path in envPath) {
+      if (await _dartExeExists(path)) {
+        // the dart executable is normally in the Dart SDK 'bin/' sub directory - so trim the path
+        final idx = path.lastIndexOf("/bin");
+        return idx == -1 ? path : path.substring(0, idx);
+      }
+    }
+    return "";
+  }
+
+  /// Confirm if the dart executable exists in the provided directory path [dirPath]
+  /// Additionally check if executing on Windows so [.exe] can be appended to [dart] first.
+  Future<bool> _dartExeExists(String dirPath) async {
+    // set correct dart executable name as different on Windows
+    final dartExe = Platform.isWindows ? "dart.exe" : "dart";
+    // check of the executable exists at the provided path
+    final dartPath = File(p.join(dirPath, dartExe));
+    return await dartPath.exists();
   }
 
   /// Convert a URL string to a Dart URI.
