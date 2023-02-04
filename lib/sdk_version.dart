@@ -44,6 +44,8 @@ class JsonDataModel {
 /// [_sdkVersion], its release date [_sdkDate], and the SDK revision
 /// [_sdkRevision]. The Dart SDK version information is managed via the
 /// [populate] method. Once run the obtained data is made available via getters.
+/// The display summary of all version data is via [displayVersions()] method.
+/// To confirm if a Dart SDK version upgrade is available [displayUpgrade()] can be used.
 class SdkVersion {
   late String _sdkVersion;
   late String _sdkDate;
@@ -57,10 +59,10 @@ class SdkVersion {
     _sdkDate = "";
     _sdkRevision = "";
     _installedVersion = "";
-    _executingVersion = executingSdk();
+    _executingVersion = _executingSdk();
   }
 
-  // Obtain Dart SDK data and populate SDK info for class variables
+  /// Obtain Dart SDK data and populate SDK info for all class variables.
   Future<void> populate() async {
     await _getSdkJsonData().then((String rawJson) {
       Map<String, dynamic> jsonResponse =
@@ -70,16 +72,20 @@ class SdkVersion {
       _sdkDate = sdkData.date;
       _sdkRevision = sdkData.revision;
     });
-    _installedVersion = await installedSdk();
+    _installedVersion = await _installedSdk();
   }
 
-  // return the stored Dart SDK values
+  /// Return the stored Dart SDK values from call fields.
   get version => _sdkVersion;
   get date => _sdkDate;
   get revision => _sdkRevision;
   get installed => _executingVersion;
 
-  // output the current available Dart SDK and the version installed.
+  /// Output the current available Dart SDK and the local version data.
+  ///
+  /// [_sdkVersion] and [_sdkDate] are the current 'stable' Dart SDK available for download.
+  /// [_installedVersion] is any locally installed Dart SDK or 'Not Found' if none.
+  /// [_executingVersion] the version of Dart that is executing this script or AOT compiled program.
   void displayVersions() {
     if (_sdkVersion.isNotEmpty && _executingVersion.isNotEmpty) {
       stdout.writeln("\nDart SDK version status:\n");
@@ -87,21 +93,6 @@ class SdkVersion {
       stdout.writeln("Installed: '${_installedVersion}'");
       stdout.writeln("Executing: '${_executingVersion}'");
     }
-  }
-
-  /// Compare the available SDk version with the installed version to see
-  /// of the strings match.
-  ///
-  /// If the two strings match then assume no upgrade is available.
-  /// If either string is empty assume no upgrade is available.
-  bool _canUpgrade() {
-    if (_installedVersion == "Not Found") {
-      return false;
-    }
-    if (_sdkVersion.isNotEmpty && _installedVersion.isNotEmpty) {
-      return _sdkVersion == _installedVersion ? false : true;
-    }
-    return false;
   }
 
   /// Display information about any possible Dart SDK upgrade.
@@ -116,13 +107,33 @@ class SdkVersion {
     }
   }
 
-  // return the current Dart runtime version
-  String executingSdk() {
+  /////////////////////////////////////////////////////////////////////////////
+  //              PRIVATE CLASS METHODS BELOW
+  /////////////////////////////////////////////////////////////////////////////
+
+  /// Compare the available SDk version with the installed version to see
+  /// of the strings match.
+  ///
+  /// If the two strings match then assume no upgrade is available.
+  /// If either string is empty assume no upgrade is available.
+  /// If no Dart SDK is installed current state can be upgraded.
+  bool _canUpgrade() {
+    if (_installedVersion == "Not Found") {
+      return true;
+    }
+    if (_sdkVersion.isNotEmpty && _installedVersion.isNotEmpty) {
+      return _sdkVersion == _installedVersion ? false : true;
+    }
+    return false;
+  }
+
+  /// Return the current Dart runtime version being executed.
+  String _executingSdk() {
     return Platform.version.split(" ").first;
   }
 
   // return the version of any installed Dart SDK or 'Not Found'
-  Future<String> installedSdk() async {
+  Future<String> _installedSdk() async {
     String installedSdkPath = await _dartSdkPath();
     if (installedSdkPath.isEmpty) {
       return "Not Found";
@@ -178,7 +189,7 @@ class SdkVersion {
     return "";
   }
 
-  /// Confirm if the dart executable exists in the provided directory path [dirPath]
+  /// Confirm if the dart executable exists in the provided directory path [dirPath].
   /// Additionally check if executing on Windows so [.exe] can be appended to [dart] first.
   Future<bool> _dartExeExists(String dirPath) async {
     // set correct dart executable name as different on Windows
