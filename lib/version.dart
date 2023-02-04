@@ -47,8 +47,7 @@ System locale is '$_systemLocale'.""");
 
   /// Return the collated data as a formatted string.
   String asString() {
-    return
-        """\n'$_appName' is version: '$_appVersion' built in '$_buildMode' mode.
+    return """\n'$_appName' is version: '$_appVersion' built in '$_buildMode' mode.
 $_appLastModifiedOrBuilt
 Running Dart version: '$_dartVersion'.
 Executing on computer '$_computerName' with '$_osName $_osVersion' with $_numberCpus CPUs.
@@ -100,5 +99,4 @@ System locale is '$_systemLocale'.""";
     // TODO: format data time string before returning
     return "Last modified on: ${File(_getAppFullPath()).lastModifiedSync().toLocal()}";
   }
-
 }
