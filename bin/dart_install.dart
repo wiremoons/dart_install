@@ -83,7 +83,7 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  // managed any unexpected addtional arguments
+  // managed any unexpected additional arguments
   if (cliResults.rest.isNotEmpty) {
     stderr.writeln(
         "\nERROR: no command matches input: '${cliResults.rest.toString()}'");
