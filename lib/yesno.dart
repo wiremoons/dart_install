@@ -8,8 +8,6 @@
 /// forms of 'yes' or 'no' to suit the user prefered approach to
 /// answering.
 //
-// Disable some specific linting rules in this file only
-// ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:io';
 

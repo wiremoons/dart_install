@@ -6,8 +6,6 @@
 /// [https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.5/sdk/dartsdk-macos-arm64-release.zip]
 /// where the version shown [2.18.5] will be replaced when the SDK version is updated.
 //
-// Disable some specific linting rules in this file only
-// ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:math';
 import 'dart:io';

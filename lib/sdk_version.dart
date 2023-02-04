@@ -5,8 +5,6 @@
 // URL to query for latest available 'stable' version is:
 // https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION
 //
-// Disable some specific linting rules in this file only
-// ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:core';
 import 'dart:io';

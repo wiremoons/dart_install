@@ -17,6 +17,8 @@ check_status () {
   return
 }
 
+printf "\n\n [*]  Ruuning 'dart analyse' to check source code files...\n\n"
+dart analyze
 printf "\n\n [*]  Building 'dart_install'...\n\n"
 dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install
 check_status
