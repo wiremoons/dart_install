@@ -239,4 +239,6 @@ Future<void> upgradeSdk(String sdkVersion) async {
   await makeExecutable(
       File(p.join(destSdkDirectory, "dart-sdk/bin/utils/gen_snapshot")));
   stdout.writeln(" [✔]  Installation of Dart SDK completed.\n");
+  stdout.writeln(
+      "\n ℹ️  Note: To disable Dart analytics reporting run:  dart --disable-analytics\n");
 }
