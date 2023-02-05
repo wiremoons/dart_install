@@ -168,7 +168,7 @@ Future<String> getFileSize(String filePath, int displayDecimals) async {
 
 /// Main function to download and install a new Dart SDK.
 ///
-/// Perform the download and install of the current 'stable' Dart SDk version.
+/// Perform the download and install of the current 'stable' Dart SDK version.
 /// Requires the current Dart SDK version available is provided to the function as [sdkVersion].
 Future<void> upgradeSdk(String sdkVersion) async {
   stdout.writeln("\nDart SDK installation starting...");
