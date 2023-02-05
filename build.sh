@@ -17,6 +17,8 @@ check_status () {
   return
 }
 
+printf "\n\n [*]  Ruuning 'dart foramt' to check source code files...\n\n"
+dart format --output=none --set-exit-if-changed .
 printf "\n\n [*]  Ruuning 'dart analyse' to check source code files...\n\n"
 dart analyze
 printf "\n\n [*]  Building 'dart_install'...\n\n"

@@ -22,7 +22,7 @@ jobs:
       # You can specify other versions if desired, see documentation here:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
-      # Chnage below to use a different Dart SDk version:
+      # Change below to use a different Dart SDK version:
       - uses: dart-lang/setup-dart@v1.3
         with:
           sdk: 2.19.1
@@ -47,18 +47,19 @@ jobs:
       # Project build: run a build
       - name: Run build
         run: |
-          echo "Build and run the Dart application"
+          echo "INFO: Build and run the Dart application..."
           mkdir build
           pwd
           ls -l
+          echo "INFO: Build the Dart application"
           dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install
-          echo "Run the Dart application - show help"
+          echo "INFO: Run the Dart application with : --help"
           ./build/dart_install -h
-          echo "Run the Dart application - show version"
+          echo "INFO: Run the Dart application with : --version"
           ./build/dart_install -v
-          echo "Run the Dart application - run normal"
+          echo "INFO: Run the Dart application with no CLI flags"
           ./build/dart_install
-          echo "Run the Dart application - run check"
+          echo "INFO: Run the Dart application with : --check"
           ./build/dart_install -c
           echo "DONE"
           
