@@ -10,13 +10,13 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 import 'dart:io';
 import 'package:args/args.dart';
+import 'package:dav/dav.dart';
 
 // import local code
-import 'package:dart_install/version.dart';
 import 'package:dart_install/sdk_install.dart';
 import 'package:dart_install/sdk_version.dart';
 
-const String applicationVersion = "0.3.1";
+const String applicationVersion = "0.4.0";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();
@@ -45,6 +45,8 @@ void main(List<String> arguments) async {
       stdout.writeln(
           "\nProgram installs the Dart SDK to the computer it is run from.\n");
       stdout.writeln("Usage:\n${parser.usage}\n");
+      stdout.writeln("Copyright © 2023 Simon Rowe <simon@wiremoons.com>");
+      stdout.writeln("https://github.com/wiremoons/dart_install");
       exit(0);
     }
   });
@@ -59,7 +61,7 @@ void main(List<String> arguments) async {
 
   // display application version information if requested on the command line
   if (cliResults.wasParsed('version')) {
-    final version = Version(appVersion: applicationVersion);
+    final version = Dav(appVersion: applicationVersion);
     version.display();
     exit(0);
   }

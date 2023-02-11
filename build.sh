@@ -1,7 +1,8 @@
 #!/usr/bin/env zsh
 #
-# Dart AOT Build file for 'dart_install'
+# Dart AOT Build file for '$DARTAPP' - set name below:
 
+DARTAPP="dart_install"
 
 ##############################################################################
 #  HELPER FUNCTION: check_status
@@ -21,7 +22,7 @@ printf "\n\n [*]  Ruuning 'dart foramt' to check source code files...\n\n"
 dart format --output=none --set-exit-if-changed .
 printf "\n\n [*]  Ruuning 'dart analyse' to check source code files...\n\n"
 dart analyze
-printf "\n\n [*]  Building 'dart_install'...\n\n"
-dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/dart_install.dart -o ./build/dart_install
+printf "\n\n [*]  Building '%s'...\n\n" "$DARTAPP"
+dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/$DARTAPP.dart -o ./build/$DARTAPP
 check_status
-printf "\n [✔]  Build completed.  Run: ./build/dart_install\n"
+printf "\n [✔]  Build completed.  Run: ./build/%s\n" "$DARTAPP"
