@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: "0c80aeab9bc807ab10022cd3b2f4cf2ecdf231949dc1ddd9442406a003f19201"
+      sha256: "503361166f4a100e0d7eb7fb5a62c6f0322512f2bcb48d6922caf98f24b0ab90"
       url: "https://pub.dev"
     source: hosted
-    version: "52.0.0"
+    version: "56.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: cd8ee83568a77f3ae6b913a36093a1c9b1264e7cb7f834d9ddd2311dade9c1f4
+      sha256: "93fcd81a6716e69864516750590cf1e699420615046bda19100238aa7b429785"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.0"
+    version: "5.8.0"
   archive:
     dependency: "direct main"
     description:
@@ -29,18 +29,18 @@ packages:
     dependency: "direct main"
     description:
       name: args
-      sha256: "139d809800a412ebb26a3892da228b2d0ba36f0ef5d9a82166e5e52ec8d61611"
+      sha256: "4cab82a83ffef80b262ddedf47a0a8e56ee6fbf7fe21e6e768b02792034dd440"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.4.0"
   async:
     dependency: transitive
     description:
       name: async
-      sha256: bfe67ef28df125b7dddcea62755991f807aa39a2492a23e1550161692950bbe0
+      sha256: "947bfcf187f74dbc5e146c9eb9c0f10c9f8b30743e341481c1e2ed3ecc18c20c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.10.0"
+    version: "2.11.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -69,10 +69,10 @@ packages:
     dependency: transitive
     description:
       name: coverage
-      sha256: "961c4aebd27917269b1896382c7cb1b1ba81629ba669ba09c27a7e5710ec9040"
+      sha256: "2fb815080e44a09b85e0f2ca8a820b15053982b2e714b59267719e8a9ff17097"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.2"
+    version: "1.6.3"
   crypto:
     dependency: transitive
     description:
@@ -197,10 +197,10 @@ packages:
     dependency: transitive
     description:
       name: node_preamble
-      sha256: "8ebdbaa3b96d5285d068f80772390d27c21e1fa10fb2df6627b1b9415043608d"
+      sha256: "6e7eac89047ab8a8d26cf16127b5ed26de65209847630400f9aefd7cd5c730db"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   package_config:
     dependency: transitive
     description:
@@ -221,10 +221,10 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: db7306cf0249f838d1a24af52b5a5887c5bf7f31d8bb4e827d071dc0939ad346
+      sha256: ae73e842cdd27a3467a71d70cefd9b198538aab4fc7dde1d0e8c78c96225abf0
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.2"
+    version: "3.7.1"
   pool:
     dependency: transitive
     description:
@@ -285,10 +285,10 @@ packages:
     dependency: transitive
     description:
       name: source_maps
-      sha256: "490098075234dcedb83c5d949b4c93dad5e6b7702748de000be2b57b8e6b2427"
+      sha256: "708b3f6b97248e5781f493b765c3337db11c5d2c81c3094f10904bfa8004c703"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.11"
+    version: "0.10.12"
   source_span:
     dependency: transitive
     description:
@@ -333,10 +333,10 @@ packages:
     dependency: "direct dev"
     description:
       name: test
-      sha256: b54d427664c00f2013ffb87797a698883c46aee9288e027a50b46eaee7486fa2
+      sha256: "5301f54eb6fe945daa99bc8df6ece3f88b5ceaa6f996f250efdaaf63e22886be"
       url: "https://pub.dev"
     source: hosted
-    version: "1.22.2"
+    version: "1.23.1"
   test_api:
     dependency: transitive
     description:
@@ -349,10 +349,10 @@ packages:
     dependency: transitive
     description:
       name: test_core
-      sha256: "95ecc12692d0dd59080ab2d38d9cf32c7e9844caba23ff6cd285690398ee8ef4"
+      sha256: d2e9240594b409565524802b84b7b39341da36dd6fd8e1660b53ad928ec3e9af
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.22"
+    version: "0.4.24"
   typed_data:
     dependency: transitive
     description:
@@ -365,10 +365,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "2277c73618916ae3c2082b6df67b6ebb64b4c69d9bf23b23700707952ac30e60"
+      sha256: b3dfd4c8a6974975a7f348b663050f3c5812a9a544d993554ee9664bde0e0bf8
       url: "https://pub.dev"
     source: hosted
-    version: "10.1.2"
+    version: "11.2.1"
   watcher:
     dependency: transitive
     description:
