@@ -25,6 +25,10 @@ dart format --output=none --set-exit-if-changed .
 printf "\n\n [*]  Ruuning 'dart analyse' to check source code files...\n\n"
 dart analyze
 printf "\n\n [*]  Building '%s'...\n\n" "$DARTAPP"
+if [[ ! -d ./build ]]; then
+  mkdir ./build
+  check_status
+fi
 dart compile exe -DDART_BUILD="Built on: $(date)" ./bin/$DARTAPP.dart -o ./build/$DARTAPP
 check_status
 printf "\n [✔]  Build completed.  Run: ./build/%s\n" "$DARTAPP"
