@@ -5,6 +5,8 @@
 /// URL to download the latest macOS arm64 'stable' version is:
 /// [https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.5/sdk/dartsdk-macos-arm64-release.zip]
 /// where the version shown [2.18.5] will be replaced when the SDK version is updated.
+/// URL for Raspberry Pi aarch64 on Ubuntu is:
+/// [https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.5/sdk/dartsdk-linux-arm64-release.zip]
 //
 
 import 'dart:math';
@@ -13,10 +15,21 @@ import 'yesno.dart';
 import 'unzip.dart';
 import 'package:path/path.dart' as p;
 
-/// Create a the Dart SDK download URL for the current version specific to macOS arm64 install.
+/// Create a the Dart SDK download URL for the current version specific to current running OS.
+// TODO: check CPU architectutre for OS - as could be x64 or aarch64 for most
 String createDownLoadUrl(String sdkVersion) {
   if (sdkVersion.isEmpty) return sdkVersion;
-  return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-macos-arm64-release.zip";
+  if (Platform.isMacOS) {
+    return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-macos-arm64-release.zip";
+  }
+  if (Platform.isLinux) {
+    return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-linux-arm64-release.zip";
+  }
+  if (Platform.isWindows) {
+    return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-windows-x64-release.zip";
+  }
+  // no match found so return empty string.
+  return "";
 }
 
 /// Construct the local file name to be used to identify the downloaded Dart SDK install zip file.
