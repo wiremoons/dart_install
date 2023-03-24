@@ -111,12 +111,12 @@ class SdkVersion {
   //              PRIVATE CLASS METHODS BELOW
   /////////////////////////////////////////////////////////////////////////////
 
-  /// Compare the available SDk version with the installed version to see
+  /// Compare the available SDK version with the installed version to see
   /// of the strings match.
   ///
   /// If the two strings match then assume no upgrade is available.
   /// If either string is empty assume no upgrade is available.
-  /// If no Dart SDK is installed current state can be upgraded.
+  /// If no Dart SDK is installed current state is 'can be upgraded'.
   bool _canUpgrade() {
     if (_installedVersion == "Not Found") {
       return true;
@@ -138,7 +138,7 @@ class SdkVersion {
     if (installedSdkPath.isEmpty) {
       return "Not Found";
     }
-    // Have Dart SDK location - check for 'version' file
+    // Have a Dart SDK location - check for 'version' file
     final dartSdkVersionFile = File(p.join(installedSdkPath, "version"));
     if (!await dartSdkVersionFile.exists()) {
       return "Not Found";
@@ -171,21 +171,24 @@ class SdkVersion {
       return envDartSdkPath;
     }
     //
-    // DART_SDK env failed!
-    // check the environment PATH for 'dart' or 'dart.exe' file
+    // !!- finding the 'DART_SDK' environment variable failed -!!
+    // next check the environment 'PATH' for a 'dart' or 'dart.exe' file
     final envPath = Platform.environment["PATH"]?.split(":");
     if (envPath == null || envPath.isEmpty) return "";
     //
     // final path = envPath.firstWhere((path) => await _dartExeExists(path), orElse: () => "");
     //
-    // check each environment PATH entry for a dart file - return on first found
+    // check each environment 'PATH' entry for a dart file - return on first found
     for (final path in envPath) {
       if (await _dartExeExists(path)) {
         // the dart executable is normally in the Dart SDK 'bin/' sub directory - so trim the path
+        // to provide the root of the SDK path - not the 'bin/' sub directory location
         final idx = path.lastIndexOf("/bin");
+        // if the '/bin' was found - trim it off otherwise just return the 'dart' binary location
         return idx == -1 ? path : path.substring(0, idx);
       }
     }
+    // nothing worked to locate the Dart SDK - so return an empty string
     return "";
   }
 
