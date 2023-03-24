@@ -1,7 +1,7 @@
 //
 // Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
-/// Install or re-install the current 'stable' Dart SDK version.
+/// Install or replace (by re-installation) the current 'stable' Dart SDK version.
 /// URL to download the latest macOS arm64 'stable' version is:
 /// [https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.5/sdk/dartsdk-macos-arm64-release.zip]
 /// where the version shown [2.18.5] will be replaced when the SDK version is updated.
@@ -15,15 +15,19 @@ import 'yesno.dart';
 import 'unzip.dart';
 import 'package:path/path.dart' as p;
 
-/// Create a the Dart SDK download URL for the current version specific to current running OS.
-// TODO: check CPU architectutre for OS - as could be x64 or aarch64 for most
+/// Create a the Dart SDK download URL for the current version specific to current running OS
+/// and the CPU architecture - assuming either Intel x64 or arm64 where Dart SDK make choices available.
 String createDownLoadUrl(String sdkVersion) {
   if (sdkVersion.isEmpty) return sdkVersion;
   if (Platform.isMacOS) {
-    return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-macos-arm64-release.zip";
+    return Platform.version.contains("arm64")
+        ? "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-macos-arm64-release.zip"
+        : "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-macos-x64-release.zip";
   }
   if (Platform.isLinux) {
-    return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-linux-arm64-release.zip";
+    return Platform.version.contains("arm64")
+        ? "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-linux-arm64-release.zip"
+        : "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-linux-x64-release.zip";
   }
   if (Platform.isWindows) {
     return "https://storage.googleapis.com/dart-archive/channels/stable/release/${sdkVersion}/sdk/dartsdk-windows-x64-release.zip";
