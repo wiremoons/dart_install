@@ -16,7 +16,7 @@ import 'package:dav/dav.dart';
 import 'package:dart_install/sdk_install.dart';
 import 'package:dart_install/sdk_version.dart';
 
-const String applicationVersion = "0.5.0";
+const String applicationVersion = "0.6.0";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();

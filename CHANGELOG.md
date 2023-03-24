@@ -1,3 +1,9 @@
+## 0.6.9
+- Improve the command line switch help descriptions
+- Ensure either arm64 or x64 is selected as SDK download on macOS and Linux OS
+- Improve some code comments for bettter clarity
+- Update version to v0.6.0 to reflect above changes
+
 ## 0.5.0
 - Updated CI actions file to build with Dart SDK 2.19.2 to work with dav package
 - Add step to create the ./build dir if it does not exist for the 'build.sh' script
