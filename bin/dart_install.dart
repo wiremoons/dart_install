@@ -26,24 +26,24 @@ void main(List<String> arguments) async {
       abbr: 'c',
       negatable: false,
       defaultsTo: false,
-      help: 'Check for new Dart SDK version.');
+      help: 'Check for any new Dart SDK version.');
   parser.addFlag('install',
       abbr: 'i',
       negatable: false,
       defaultsTo: false,
-      help: 'Install or reinstall the latest Dart SDK.');
+      help: 'Install (or upgrade via replacement) with the latest Dart SDK.');
   parser.addFlag('version',
       abbr: 'v',
       negatable: false,
       defaultsTo: false,
-      help: 'Display the applications version.');
+      help: 'Display this applications version details.');
   parser.addFlag('help',
       abbr: 'h',
       negatable: false,
       help: 'Display additional help information.', callback: (help) {
     if (help) {
       stdout.writeln(
-          "\nProgram installs the Dart SDK to the computer it is run from.\n");
+          "\nProgram installs or upgrades via replacement the Dart SDK to the latest version.\n");
       stdout.writeln("Usage:\n${parser.usage}\n");
       stdout.writeln("Copyright © 2023 Simon Rowe <simon@wiremoons.com>");
       stdout.writeln("https://github.com/wiremoons/dart_install");
