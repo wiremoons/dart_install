@@ -15,8 +15,9 @@ import 'package:dav/dav.dart';
 // import local code
 import 'package:dart_install/sdk_install.dart';
 import 'package:dart_install/sdk_version.dart';
+import 'package:dart_install/sdk_changelog.dart';
 
-const String applicationVersion = "0.6.0";
+const String applicationVersion = "0.7.0";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();
@@ -32,6 +33,11 @@ void main(List<String> arguments) async {
       negatable: false,
       defaultsTo: false,
       help: 'Install (or upgrade via replacement) with the latest Dart SDK.');
+  parser.addFlag('changelog',
+      abbr: 'l',
+      negatable: false,
+      defaultsTo: false,
+      help: 'Display the Dart SDK Change Log details.');
   parser.addFlag('version',
       abbr: 'v',
       negatable: false,
@@ -82,6 +88,14 @@ void main(List<String> arguments) async {
     sdkver.displayVersions();
     sdkver.displayUpgrade();
     await upgradeSdk(sdkver.version);
+    exit(0);
+  }
+
+  // Display the Dart SDK Change Log
+  if (cliResults.wasParsed('changelog')) {
+    final cl = ChangeLog();
+    await cl.populate();
+    cl.displayChangeLog();
     exit(0);
   }
 

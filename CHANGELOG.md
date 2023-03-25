@@ -1,4 +1,9 @@
-## 0.6.9
+## 0.7.0
+- New feature to display the Dart SDK Change Log details for current version
+- Update version to v0.7.0 to reflect new feature change.
+- New command line flag '-l' or '--changelog' to access new CHANGELOG.md display feature
+
+## 0.6.0
 - Improve the command line switch help descriptions
 - Ensure either arm64 or x64 is selected as SDK download on macOS and Linux OS
 - Improve some code comments for bettter clarity
