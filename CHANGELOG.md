@@ -1,3 +1,7 @@
+## 0.8.1
+- Fix Dart SDK removal checking steps to ensure the directory to be removed exists
+- Increment version to 0.8.1
+
 ## 0.8.0
 - Add new command line option for removal of the SDK install
 - increment the version to reflect new functionality

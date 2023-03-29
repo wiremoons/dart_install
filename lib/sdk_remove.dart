@@ -12,8 +12,8 @@ import 'package:path/path.dart' as p;
 import 'package:dart_install/sdk_install.dart';
 
 // remove provided directory path
-void removeDir(String removePath) {
-  if (removePath.isNotEmpty) {
+Future<void> removeDir(String removePath) async {
+  if (removePath.isNotEmpty && await Directory(removePath).exists()) {
     // existing matching path found - check with user if removal is ok
     stdout.writeln(" [!]  Existing directory found: '${removePath}'");
     if (yesNo(question: "Remove exising installation")) {
@@ -31,6 +31,9 @@ void removeDir(String removePath) {
           "\n ❌ ERROR: user declined to remove directory: ${removePath}.\n\n");
       return;
     }
+  } else {
+    stderr.writeln(
+        "\n  ERROR: provided path '${removePath}' does not exists - deletion failure.");
   }
 }
 
@@ -51,8 +54,8 @@ Future<void> removeSdk() async {
   final String dartServerPath = p.join("$envHomePath", ".dartServer");
   // remove the different SDK paths
   stdout.writeln(" [*]  All removal paths set - starting deletion...");
-  removeDir(sdkPath);
-  removeDir(pubcachePath);
-  removeDir(dartServerPath);
+  await removeDir(sdkPath);
+  await removeDir(pubcachePath);
+  await removeDir(dartServerPath);
   stdout.writeln(" [✔]  Removal of Dart SDK completed.\n");
 }
