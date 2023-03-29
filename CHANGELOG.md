@@ -1,3 +1,9 @@
+## 0.8.0
+- Add new command line option for removal of the SDK install
+- increment the version to reflect new functionality
+- add new source code file 'sdk_remove.dart' for remove code
+- update Githib Action to use Dart SDK 2.19.6
+
 ## 0.7.0
 - New feature to display the Dart SDK Change Log details for current version
 - Update version to v0.7.0 to reflect new feature change.

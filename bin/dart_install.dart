@@ -16,8 +16,9 @@ import 'package:dav/dav.dart';
 import 'package:dart_install/sdk_install.dart';
 import 'package:dart_install/sdk_version.dart';
 import 'package:dart_install/sdk_changelog.dart';
+import 'package:dart_install/sdk_remove.dart';
 
-const String applicationVersion = "0.7.0";
+const String applicationVersion = "0.8.0";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();
@@ -38,6 +39,11 @@ void main(List<String> arguments) async {
       negatable: false,
       defaultsTo: false,
       help: 'Display the Dart SDK Change Log details.');
+  parser.addFlag('remove',
+      abbr: 'r',
+      negatable: false,
+      defaultsTo: false,
+      help: 'Remove the Dart SDK installation and cache locations.');
   parser.addFlag('version',
       abbr: 'v',
       negatable: false,
@@ -96,6 +102,12 @@ void main(List<String> arguments) async {
     final cl = ChangeLog();
     await cl.populate();
     cl.displayChangeLog();
+    exit(0);
+  }
+
+  // Remove the Dart SDK installation and cachees
+  if (cliResults.wasParsed('remove')) {
+    await removeSdk();
     exit(0);
   }
 
