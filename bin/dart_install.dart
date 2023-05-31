@@ -55,7 +55,7 @@ void main(List<String> arguments) async {
       help: 'Display additional help information.', callback: (help) {
     if (help) {
       stdout.writeln(
-          "\nProgram installs or upgrades via replacement the Dart SDK to the latest version.\n");
+          "\nProgram installs or upgrades the Dart SDK to the latest version.\n");
       stdout.writeln("Usage:\n${parser.usage}\n");
       stdout.writeln("Copyright © 2023 Simon Rowe <simon@wiremoons.com>");
       stdout.writeln("https://github.com/wiremoons/dart_install");
