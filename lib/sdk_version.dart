@@ -101,9 +101,9 @@ class SdkVersion {
   /// availability.
   void displayUpgrade() {
     if (_canUpgrade()) {
-      stdout.writeln("\n⚠️   Dart SDK upgrade is available.");
+      stdout.writeln("\n⚠️  [!] Dart SDK upgrade is available.");
     } else {
-      stdout.writeln("\n✅  Installed Dart SDK is the current version.");
+      stdout.writeln("\n✅  [*] Installed Dart SDK is the current version.");
     }
   }
 
@@ -112,7 +112,7 @@ class SdkVersion {
   /////////////////////////////////////////////////////////////////////////////
 
   /// Compare the available SDK version with the installed version to see
-  /// of the strings match.
+  /// if the strings match.
   ///
   /// If the two strings match then assume no upgrade is available.
   /// If either string is empty assume no upgrade is available.
@@ -155,7 +155,7 @@ class SdkVersion {
   /// Locate the full path to the local Dart SDK installation
   ///
   /// Check if the [DART_SDK] environment variable is set which can be used to identify the installed
-  /// Dart SDK location. If this exists it is used as it has been manually set, so should be good.
+  /// Dart SDK location. If this exists, then use it, as it has been manually set, so should be good.
   /// If no [DART_SDK] env exists, then search the PATH environment for the *dart* or *dart.exe* which if
   /// available should be in the Dart SDK *bin/* sub directory.
   Future<String> _dartSdkPath() async {
@@ -165,7 +165,7 @@ class SdkVersion {
       // Check the dart exe exists in the sub directory 'bin/'
       if (await _dartExeExists(p.join(envDartSdkPath, "bin"))) {
         stderr.writeln(
-            " [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in a 'bin/' subdirectory");
+            " [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in the 'bin/' subdirectory");
       }
       // return what the user set anyway - as they know their computer best...
       return envDartSdkPath;
