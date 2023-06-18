@@ -21,24 +21,30 @@ class ChangeLog {
     _changeLogText = "";
   }
 
-  /// Obtain Dart SDK changelog data
-  Future<void> populate() async {
+  /// Obtain Dart SDK changelog data and remove all text after the first markdown '##' heading.
+  Future<void> populateLatest() async {
     final allLogText = await _getChangeLogData();
     List<String> changeList = allLogText.split("## ");
     _changeLogText = changeList.elementAt(1).trim();
   }
 
-  /// Return the stored Dart SDK chnagelog text.
+  /// Obtain the Dart SDK changelog data and keep all the markdown data (ie keep the whole file).
+  Future<void> populate() async {
+    final allLogText = await _getChangeLogData();
+    _changeLogText = allLogText.isEmpty ? "" : allLogText;
+  }
+
+  /// Return the latest entry from the Dart SDK changlelog text markdown file.
   get changeLog => _changeLogText;
 
-  /// Display CHANGELOG.md information.
+  /// Display whatever change log data was obtained (ie either [populate()] or [populateLatest()].
   ///
   void displayChangeLog() {
     if (_changeLogText.isNotEmpty) {
       stdout.writeln(
           "\n [✔]  Dart SDK latest change log entry is:\n\n${_changeLogText}");
     } else {
-      stdout.writeln("\n [!]  No change log data found✅.");
+      stdout.writeln("\n [!]  No change log data found.");
     }
   }
 
@@ -62,11 +68,11 @@ class ChangeLog {
     }
   }
 
-  /// Request the JSON data for the Dart SDK URL [_sdkUrl].
+  /// Request the markdown file containing changelog data for the URL [_changeLogUrl].
   ///
-  /// Request the JSON data containing the current available stable Dart SDK
-  /// version from the URL [_sdkUrl]. The URL is converted to a URI [_toUri] and the
-  /// web page is requested. Return the body of the page received as a String.
+  /// Request the markdown data containing the complete changelog record for stable Dart SDK
+  /// versions from the URL [_changeLogUrl]. The URL is converted to a URI [_toUri] and the
+  /// web page is requested. Return the body of the page received (markdown file) as a String.
   Future<String> _getChangeLogData() async {
     Client client = Client();
     final response = await client.get(_toUri(_changeLogUrl));
@@ -76,7 +82,7 @@ class ChangeLog {
     } else {
       client.close();
       stderr.writeln(
-          'FATAL ERROR: Dart SDK CHANGELOG.md web request failed with status: ${response.statusCode}.');
+          '  [!] FATAL ERROR: Dart SDK CHANGELOG.md web request failed with status: ${response.statusCode}.');
       exit(2);
     }
   }

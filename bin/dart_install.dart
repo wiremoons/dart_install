@@ -18,7 +18,7 @@ import 'package:dart_install/sdk_version.dart';
 import 'package:dart_install/sdk_changelog.dart';
 import 'package:dart_install/sdk_remove.dart';
 
-const String applicationVersion = "0.8.1";
+const String applicationVersion = "0.8.2";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();
@@ -97,10 +97,10 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  // Display the Dart SDK Change Log
+  // Display the Dart SDK Change Log - just the latest entry
   if (cliResults.wasParsed('changelog')) {
     final cl = ChangeLog();
-    await cl.populate();
+    await cl.populateLatest();
     cl.displayChangeLog();
     exit(0);
   }

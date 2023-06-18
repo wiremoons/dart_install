@@ -1,3 +1,10 @@
+## 0.8.2
+- Correct comments in sdk_changelog.dart to reflect functios actual purpose
+- In sdk_changelog.dart update methods for full changelog.md file and one with only the latest entry
+- Removed glyphs from output messages so only simplier text base feedback is used
+- general comments clean up
+- Increment version to 0.8.2
+
 ## 0.8.1
 - Fix Dart SDK removal checking steps to ensure the directory to be removed exists
 - Increment version to 0.8.1

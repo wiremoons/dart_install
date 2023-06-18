@@ -57,7 +57,7 @@ Future<void> makeExecutable(File file) async {
     ProcessResult result = await Process.run("chmod", ["755", file.path]);
     if (result.exitCode != 0) {
       stderr.writeln(
-          "\n\n ❌ ERROR: failed to set execute file permissions for file: '${file}' due to: '${result.stderr}'");
+          "\n\n [!] ERROR: failed to set execute file permissions for file: '${file}' due to: '${result.stderr}'");
     }
   }
 }
@@ -159,7 +159,7 @@ Future<bool> downloadSDk(String downLoadFilePath, String downLoadUrl) async {
     return true;
   } catch (e) {
     stderr.writeln(
-        "\n\n ❌ ERROR: failed to download file: '${downLoadUrl}' due to: '${e}'");
+        "\n\n [!] ERROR: failed to download file: '${downLoadUrl}' due to: '${e}'");
     return false;
   }
 }
@@ -192,7 +192,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
   stdout.writeln(" [*]  Installing Dart SDK version: '${sdkVersion}'");
   final String downLoadUrl = createDownLoadUrl(sdkVersion);
   if (downLoadUrl.isEmpty) {
-    stderr.writeln("\n\n ❌ ERROR: Dart SDK download URL is missing\n");
+    stderr.writeln("\n\n [!] ERROR: Dart SDK download URL is missing\n");
     return;
   }
   // set up supporting paths and data before executing
@@ -212,12 +212,12 @@ Future<void> upgradeSdk(String sdkVersion) async {
         stdout.writeln(" [✔]  Removal successful.");
       } catch (err) {
         stderr.writeln(
-            "\n\n ❌ ERROR: unable to remove Dart SDK directory: '${err}'.\n\n");
+            "\n\n [!] ERROR: unable to remove Dart SDK directory: '${err}'.\n\n");
         return;
       }
     } else {
       stderr.writeln(
-          "\n ❌ ERROR: unable to upgrade as existing Dart SDK install exists.\n\n");
+          "\n [!] ERROR: unable to upgrade as existing Dart SDK install exists.\n\n");
       return;
     }
   }
@@ -231,7 +231,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
         " [!]  Re-using found previously downloaded file: ${downLoadFilePath}");
   } else {
     if (!await downloadSDk(downLoadFilePath, downLoadUrl)) {
-      stderr.writeln("\n\n ❌ ERROR: Dart SDK download failed\n");
+      stderr.writeln("\n\n [!] ERROR: Dart SDK download failed\n");
       return;
     }
     stdout.writeln(" [✔]  Dart SDK download completed successfully");
@@ -245,7 +245,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
       " [*]  Unarchiving downloaded Dart SDK to destination: ${destSdkDirectory}");
   // if (!await unzipArchive(downLoadFilePath, destSdkDirectory)) {
   if (!unzipArchive2(downLoadFilePath, destSdkDirectory)) {
-    stderr.writeln("\n\n ❌ ERROR: Dart SDK unarchive process failed\n");
+    stderr.writeln("\n\n [!] ERROR: Dart SDK unarchive process failed\n");
     return;
   }
   stdout.writeln(" [✔]  Dart SDK unarchive completed successfully");
@@ -257,5 +257,5 @@ Future<void> upgradeSdk(String sdkVersion) async {
       File(p.join(destSdkDirectory, "dart-sdk/bin/utils/gen_snapshot")));
   stdout.writeln(" [✔]  Installation of Dart SDK completed.\n");
   stdout.writeln(
-      "\n ℹ️  Note: To disable Dart analytics reporting run:  dart --disable-analytics\n");
+      "\n [#]  Note: To disable Dart analytics reporting run:  dart --disable-analytics\n");
 }
