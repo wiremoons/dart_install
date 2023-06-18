@@ -17,18 +17,18 @@ Future<void> removeDir(String removePath) async {
     // existing matching path found - check with user if removal is ok
     stdout.writeln(" [!]  Existing directory found: '${removePath}'");
     if (yesNo(question: "Remove exising installation")) {
-      stdout.writeln(" [*]  Deleting: ${removePath}");
       try {
-        Directory(removePath).deleteSync(recursive: true);
-        stdout.writeln(" [✔]  Removal successful.");
+        stdout.writeln(" [*]  Deleting: ${removePath}");
+        await Directory(removePath).delete(recursive: true);
+        stdout.writeln(" [✔]  Removal successful.\n");
       } catch (err) {
-        stderr
-            .writeln("\n\n ❌ ERROR: unable to remove directory: '${err}'.\n\n");
+        stderr.writeln(
+            "\n\n [!] ERROR: unable to remove directory: '${err}'.\n\n");
         return;
       }
     } else {
       stderr.writeln(
-          "\n ❌ ERROR: user declined to remove directory: ${removePath}.\n\n");
+          "\n [!] ERROR: user declined to remove directory: ${removePath}.\n\n");
       return;
     }
   } else {
@@ -48,14 +48,21 @@ Future<void> removeSdk() async {
   final envHomePath = Platform.environment["HOME"];
   stdout.writeln(" [*]  Locating the Dart SDK installation directory");
   final String sdkPath = await dartSdkPath();
-  stdout.writeln(" [*]  Setting the 'pub-cache' installation directory");
+  stdout.writeln(" [*]  Locating the 'pub-cache' installation directory");
   final String pubcachePath = p.join("$envHomePath", ".pub-cache");
-  stdout.writeln(" [*]  Setting the 'dartServer' installation directory");
+  stdout.writeln(" [*]  Locating the 'dartServer' installation directory");
   final String dartServerPath = p.join("$envHomePath", ".dartServer");
+  stdout.writeln(" [*]  Locating the 'dart-tool' installation directory");
+  final String dartToolPath = p.join("$envHomePath", ".dart-tool");
+  stdout.writeln(" [*]  Locating the 'dart' installation directory");
+  final String dartHomePath = p.join("$envHomePath", ".dart");
   // remove the different SDK paths
-  stdout.writeln(" [*]  All removal paths set - starting deletion...");
+  stdout.writeln(" [*]  All removal paths set - starting deletion...\n");
   await removeDir(sdkPath);
   await removeDir(pubcachePath);
   await removeDir(dartServerPath);
-  stdout.writeln(" [✔]  Removal of Dart SDK completed.\n");
+  await removeDir(dartToolPath);
+  await removeDir(dartHomePath);
+  stdout.writeln(
+      " [✔]  Removal of Dart SDK and supporting directory infrastructure completed.\n");
 }

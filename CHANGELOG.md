@@ -1,9 +1,14 @@
+## 0.9.0
+- For '-r / -remove' also remove any '$HOME/.dart' and '$HOME/.dart-tool' directories
+- Improve output messages when running '-r / -remove'
+- Increment version to v0.9.0
+
 ## 0.8.2
 - Correct comments in sdk_changelog.dart to reflect functios actual purpose
 - In sdk_changelog.dart update methods for full changelog.md file and one with only the latest entry
 - Removed glyphs from output messages so only simplier text base feedback is used
 - general comments clean up
-- Increment version to 0.8.2
+- Increment version to v0.8.2
 
 ## 0.8.1
 - Fix Dart SDK removal checking steps to ensure the directory to be removed exists
