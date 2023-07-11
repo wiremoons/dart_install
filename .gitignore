@@ -5,6 +5,9 @@
 # Conventional directory for build output.
 build/
 
+# Binary files from Windows build output.
+dart_install.exe
+
 # recommend to commit for application
 # pubspec.lock
 

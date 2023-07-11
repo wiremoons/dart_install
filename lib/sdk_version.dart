@@ -149,7 +149,8 @@ class SdkVersion {
     }
     try {
       String sdkVersion = await (dartSdkVersionFile.readAsString());
-      return sdkVersion.replaceAll("\n", "");
+      String newLineDelimiter = Platform.isWindows ? "\r\n" : "\n";
+      return sdkVersion.replaceAll(newLineDelimiter, "");
     } catch (e) {
       stderr.writeln('failed to read file: \n${e}');
       return "Not Found";
@@ -169,7 +170,7 @@ class SdkVersion {
       // Check the dart exe exists in the sub directory 'bin/'
       if (await _dartExeExists(p.join(envDartSdkPath, "bin"))) {
         stderr.writeln(
-            " [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in the 'bin/' subdirectory");
+            " [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in the 'bin' subdirectory");
       }
       // return what the user set anyway - as they know their computer best...
       return envDartSdkPath;
@@ -188,8 +189,10 @@ class SdkVersion {
     for (final path in envPath) {
       if (await _dartExeExists(path)) {
         // the dart executable is normally in the Dart SDK 'bin/' sub directory - so trim the path
-        // to provide the root of the SDK path - not the 'bin/' sub directory location
-        final idx = path.lastIndexOf("/bin");
+        // found to provide the root of the Dart SDK location.
+        // Ensure the '/bin' or '\bin' element is managed cross platform
+        String binValue = "${Platform.pathSeparator}bin";
+        final idx = path.lastIndexOf(binValue);
         // if the '/bin' was found - trim it off otherwise just return the 'dart' binary location
         return idx == -1 ? path : path.substring(0, idx);
       }

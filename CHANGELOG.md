@@ -1,3 +1,9 @@
+## 0.9.3
+- Add to '.gitignore' for exclusion of binary files from Windows build output
+- Improve and fix path and delimiter handling so works cross platform in 'sdk_version.dart'
+- Fix 'dart_install -c' command on Windows so now works correctly
+- Increment version to v0.9.2
+
 ## 0.9.2
 - Update '.gitignore' to simplify the 'key' exclusions
 - Increment version to v0.9.2
