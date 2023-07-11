@@ -82,7 +82,9 @@ Future<String> dartSdkPath() async {
   }
   // Finding [DART_SDK] env failed!
   // check the environment [PATH] for 'dart' or 'dart.exe' file
-  final envPath = Platform.environment["PATH"]?.split(":");
+  // Use [splitChar] as Windows and Unix delimit env PATH with ';' or ':'
+  String splitChar = Platform.isWindows ? ";" : ":";
+  final envPath = Platform.environment["PATH"]?.split(splitChar);
   if (envPath == null || envPath.isEmpty) return "";
   //
   // final path = envPath.firstWhere((path) => await dartExeExists(path), orElse: () => "");
@@ -91,7 +93,9 @@ Future<String> dartSdkPath() async {
   for (final path in envPath) {
     if (await dartExeExists(path)) {
       // the dart executable is normally in the Dart SDK 'bin/' sub directory - so trim the path
-      final idx = path.lastIndexOf("/bin");
+      // Ensure the '/bin' or '\bin' element is managed cross platform
+      String binValue = "${Platform.pathSeparator}bin";
+      final idx = path.lastIndexOf(binValue);
       return idx == -1 ? path : path.substring(0, idx);
     }
   }
@@ -249,12 +253,15 @@ Future<void> upgradeSdk(String sdkVersion) async {
     return;
   }
   stdout.writeln(" [✔]  Dart SDK unarchive completed successfully");
-  stdout.writeln(" [*]  Setting correct file permissions for unarchived files");
-  await makeExecutable(File(p.join(destSdkDirectory, "dart-sdk/bin/dart")));
-  await makeExecutable(
-      File(p.join(destSdkDirectory, "dart-sdk/bin/dartaotruntime")));
-  await makeExecutable(
-      File(p.join(destSdkDirectory, "dart-sdk/bin/utils/gen_snapshot")));
+  if (!Platform.isWindows) {
+    stdout
+        .writeln(" [*]  Setting correct file permissions for unarchived files");
+    await makeExecutable(File(p.join(destSdkDirectory, "dart-sdk/bin/dart")));
+    await makeExecutable(
+        File(p.join(destSdkDirectory, "dart-sdk/bin/dartaotruntime")));
+    await makeExecutable(
+        File(p.join(destSdkDirectory, "dart-sdk/bin/utils/gen_snapshot")));
+  }
   stdout.writeln(" [✔]  Installation of Dart SDK completed.\n");
   stdout.writeln(
       "\n [#]  Note: To disable Dart analytics reporting run:  dart --disable-analytics\n");

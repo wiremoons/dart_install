@@ -22,11 +22,12 @@ bool unzipArchive2(String downLoadFilePath, String destSdkDirectory) {
     final filename = file.name;
     if (file.isFile) {
       final data = file.content as List<int>;
-      File("$destSdkDirectory/$filename")
+      File("$destSdkDirectory${Platform.pathSeparator}$filename")
         ..createSync(recursive: true)
         ..writeAsBytesSync(data);
     } else {
-      Directory("$destSdkDirectory/$filename").create(recursive: true);
+      Directory("$destSdkDirectory${Platform.pathSeparator}$filename")
+          .create(recursive: true);
     }
   }
   // clear the prior user update message now extract finished

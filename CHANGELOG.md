@@ -1,29 +1,36 @@
+## 0.9.4
+- Improve and fix path and delimiter handling so works cross platform in `sdk_install.dart`
+- Increment version to v0.9.4
+- Change install steps to only set exec permisions for files on non Windows platforms
+- Use `Platform.pathSeparator` in `unzip.dart` to ensure cross platform support
+- Update `CHANGELOG.md` format to improve readability
+
 ## 0.9.3
-- Add to '.gitignore' for exclusion of binary files from Windows build output
-- Improve and fix path and delimiter handling so works cross platform in 'sdk_version.dart'
-- Fix 'dart_install -c' command on Windows so now works correctly
-- Increment version to v0.9.2
+- Add to `.gitignore` for exclusion of binary files from Windows build output
+- Improve and fix path and delimiter handling so works cross platform in `sdk_version.dart`
+- Fix `dart_install -c` command on Windows so now works correctly
+- Increment version to v0.9.3
 
 ## 0.9.2
-- Update '.gitignore' to simplify the 'key' exclusions
+- Update `.gitignore` to simplify the `key` exclusions
 - Increment version to v0.9.2
-- Fix comment typo in 'bin/dart_install.dart'
+- Fix comment typo in `bin/dart_install.dart`
 - Fix checking env PATH on Windows as uses different delimiter to Unix
 
 ## 0.9.1
-- Add Windows batch file to run the build commands: 'win-build.bat'
-- Fix type in word 'running' in 'build.sh' script
-- Fix errors in this 'CHANGELOG.md' file
+- Add Windows batch file to run the build commands: `win-build.bat`
+- Fix type in word `running` in `build.sh` script
+- Fix errors in this `CHANGELOG.md` file
 - Increment version to v0.9.1
 
 ## 0.9.0
-- For '-r / -remove' also remove any '$HOME/.dart' and '$HOME/.dart-tool' directories
-- Improve output messages when running '-r / -remove'
+- For `-r / -remove` also remove any `$HOME/.dart` and `$HOME/.dart-tool` directories
+- Improve output messages when running `-r / -remove`
 - Increment version to v0.9.0
 
 ## 0.8.2
-- Correct comments in 'sdk_changelog.dart' to reflect the functions actual purpose
-- In 'sdk_changelog.dart' update the methods to provide either a copy of the Dart SDK 'changelog.md' file, or just to show the latest entry only
+- Correct comments in `sdk_changelog.dart` to reflect the functions actual purpose
+- In `sdk_changelog.dart` update the methods to provide either a copy of the Dart SDK `changelog.md` file, or just to show the latest entry only
 - Removed glyphs from output messages so only simpler text base feedback is used
 - general comments clean up
 - Increment version to v0.8.2
@@ -35,13 +42,13 @@
 ## 0.8.0
 - Add new command line option for removal of the SDK install
 - increment the version to reflect new functionality
-- add new source code file 'sdk_remove.dart' for new functionality
+- add new source code file `sdk_remove.dart` for new functionality
 - update GitHub Action to use Dart SDK 2.19.6
 
 ## 0.7.0
 - New feature to display the Dart SDK Change Log details for current version
 - Update version to v0.7.0 to reflect new feature change.
-- New command line flag '-l' or '--changelog' to access new Dart SDK CHANGELOG.md display feature
+- New command line flag `-l` or `--changelog` to access new Dart SDK CHANGELOG.md display feature
 
 ## 0.6.0
 - Improve the command line switch help descriptions
@@ -51,15 +58,15 @@
 
 ## 0.5.0
 - Updated CI actions file to build with Dart SDK 2.19.2 to work with dav package
-- Add step to create the ./build dir if it does not exist for the 'build.sh' script
+- Add step to create the ./build dir if it does not exist for the `build.sh` script
 - Add updated packages used to support application (pubspec.lock)
 - Add initial step to detect operating systems for Dart SDK downloads - work in progress
-- Add step to update an pub packages before build in 'build.sh' script
+- Add step to update an pub packages before build in `build.sh` script
 
 ## 0.4.0
-- Improve '-h / --help' output to include copyright and website link
-- increase version '0.4.0' as feature complete and working
-- remove 'version.dart' and replace with package 'https://pub.dev/packages/dav'
+- Improve `-h / --help` output to include copyright and website link
+- increase version `0.4.0` as feature complete and working
+- remove `version.dart` and replace with package `https://pub.dev/packages/dav`
 
 ## 0.1.0 - 2022-11-27
 * First pre-release creation of project
