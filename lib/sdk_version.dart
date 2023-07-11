@@ -46,13 +46,18 @@ class JsonDataModel {
 /// [populate] method. Once run the obtained data is made available via getters.
 /// The display summary of all version data is via [displayVersions()] method.
 /// To confirm if a Dart SDK version upgrade is available [displayUpgrade()] can be used.
+///
+/// [_sdkVersion]       : Current 'stable' Dart SDK version available for download
+/// [_sdkDate]          : Current 'stable' Dart SDK version release date
+/// [_sdkRevision]      : Current 'stable' Dart SDK version revision number
+/// [_executingVersion] : The Dart SDK version being used to execute this program
+/// [_installedVersion] : Any identified Dart SDK version install on the computer
 class SdkVersion {
   late String _sdkVersion;
   late String _sdkDate;
   late String _sdkRevision;
   late String _executingVersion;
   late String _installedVersion;
-  // Map<String, dynamic> jsonResponse = {};
 
   SdkVersion() {
     _sdkVersion = "";
@@ -172,7 +177,9 @@ class SdkVersion {
     //
     // !!- finding the 'DART_SDK' environment variable failed -!!
     // next check the environment 'PATH' for a 'dart' or 'dart.exe' file
-    final envPath = Platform.environment["PATH"]?.split(":");
+    // Use [splitChar] as Windows and Unix delimit env PATH with ';' or ':'
+    String splitChar = Platform.isWindows ? ";" : ":";
+    final envPath = Platform.environment["PATH"]?.split(splitChar);
     if (envPath == null || envPath.isEmpty) return "";
     //
     // final path = envPath.firstWhere((path) => await _dartExeExists(path), orElse: () => "");

@@ -1,3 +1,9 @@
+## 0.9.2
+- Update '.gitignore' to simplify the 'key' exclusions
+- Increment version to v0.9.2
+- Fix comment typo in 'bin/dart_install.dart'
+- Fix checking env PATH on Windows as uses different delimiter to Unix
+
 ## 0.9.1
 - Add Windows batch file to run the build commands: 'win-build.bat'
 - Fix type in word 'running' in 'build.sh' script

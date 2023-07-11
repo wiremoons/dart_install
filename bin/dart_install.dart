@@ -18,7 +18,7 @@ import 'package:dart_install/sdk_version.dart';
 import 'package:dart_install/sdk_changelog.dart';
 import 'package:dart_install/sdk_remove.dart';
 
-const String applicationVersion = "0.9.1";
+const String applicationVersion = "0.9.2";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();
@@ -105,7 +105,7 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  // Remove the Dart SDK installation and cachees
+  // Remove the Dart SDK installation and caches
   if (cliResults.wasParsed('remove')) {
     await removeSdk();
     exit(0);
