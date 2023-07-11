@@ -1,12 +1,18 @@
+## 0.9.1
+- Add Windows batch file to run the build commands: 'win-build.bat'
+- Fix type in word 'running' in 'build.sh' script
+- Fix errors in this 'CHANGELOG.md' file
+- Increment version to v0.9.1
+
 ## 0.9.0
 - For '-r / -remove' also remove any '$HOME/.dart' and '$HOME/.dart-tool' directories
 - Improve output messages when running '-r / -remove'
 - Increment version to v0.9.0
 
 ## 0.8.2
-- Correct comments in sdk_changelog.dart to reflect functios actual purpose
-- In sdk_changelog.dart update methods for full changelog.md file and one with only the latest entry
-- Removed glyphs from output messages so only simplier text base feedback is used
+- Correct comments in 'sdk_changelog.dart' to reflect the functions actual purpose
+- In 'sdk_changelog.dart' update the methods to provide either a copy of the Dart SDK 'changelog.md' file, or just to show the latest entry only
+- Removed glyphs from output messages so only simpler text base feedback is used
 - general comments clean up
 - Increment version to v0.8.2
 
@@ -17,18 +23,18 @@
 ## 0.8.0
 - Add new command line option for removal of the SDK install
 - increment the version to reflect new functionality
-- add new source code file 'sdk_remove.dart' for remove code
-- update Githib Action to use Dart SDK 2.19.6
+- add new source code file 'sdk_remove.dart' for new functionality
+- update GitHub Action to use Dart SDK 2.19.6
 
 ## 0.7.0
 - New feature to display the Dart SDK Change Log details for current version
 - Update version to v0.7.0 to reflect new feature change.
-- New command line flag '-l' or '--changelog' to access new CHANGELOG.md display feature
+- New command line flag '-l' or '--changelog' to access new Dart SDK CHANGELOG.md display feature
 
 ## 0.6.0
 - Improve the command line switch help descriptions
 - Ensure either arm64 or x64 is selected as SDK download on macOS and Linux OS
-- Improve some code comments for bettter clarity
+- Improve some code comments for better clarity
 - Update version to v0.6.0 to reflect above changes
 
 ## 0.5.0
