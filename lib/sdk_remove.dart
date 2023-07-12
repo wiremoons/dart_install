@@ -4,6 +4,8 @@
 /// Remove the Dart SDK installation and the supporting cache files.
 //
 
+// Disable some specific linting rules in this file only
+// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 import 'dart:io';
 import 'yesno.dart';
 import 'package:path/path.dart' as p;
@@ -16,7 +18,7 @@ Future<void> removeDir(String removePath) async {
   if (removePath.isNotEmpty && await Directory(removePath).exists()) {
     // existing matching path found - check with user if removal is ok
     stdout.writeln(" [!]  Existing directory found: '${removePath}'");
-    if (yesNo(question: "Remove exising installation")) {
+    if (yesNo(question: "Remove existing installation")) {
       try {
         stdout.writeln(" [*]  Deleting: ${removePath}");
         await Directory(removePath).delete(recursive: true);
@@ -43,9 +45,18 @@ Future<void> removeDir(String removePath) async {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// TDOO(Simon) : locate on Windows the paths for supporting Dart SDK directories
 Future<void> removeSdk() async {
   stdout.writeln("\nDart SDK removal starting...");
-  final envHomePath = Platform.environment["HOME"];
+  // Account for no 'HOME' environment variable on Windows:
+  final envHomePath = Platform.isWindows
+      ? Platform.environment["USERPROFILE"]
+      : Platform.environment["HOME"];
+  if (envHomePath == null || envHomePath.isEmpty) {
+    stderr.writeln(
+        "\n  ERROR: either '\$HOME' or '%USERPROFILE%' not found in environment variables - deletion failure.");
+    return;
+  }
   stdout.writeln(" [*]  Locating the Dart SDK installation directory");
   final String sdkPath = await dartSdkPath();
   stdout.writeln(" [*]  Locating the 'pub-cache' installation directory");

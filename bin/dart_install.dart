@@ -18,7 +18,7 @@ import 'package:dart_install/sdk_version.dart';
 import 'package:dart_install/sdk_changelog.dart';
 import 'package:dart_install/sdk_remove.dart';
 
-const String applicationVersion = "0.9.4";
+const String applicationVersion = "0.9.5";
 
 void main(List<String> arguments) async {
   var parser = ArgParser();

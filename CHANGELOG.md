@@ -1,7 +1,16 @@
+## 0.9.5
+- Fix identification of `HOME` location on Windows in `sdk_install.dart` and `sdk_remove.dart`
+- Add error output if `PATH` is empty in `sdk_install.dart` and `sdk_remove.dart`
+- Correct spelling typos in `sdk_install.dart` outputs
+- Add install note to user about adding Dart DSK 'bin' locations (shown) to their PATH
+- Add additional checks for install destination parameters - abort if errors found
+- Increment version to v0.9.5
+- Improve overall consistency of formatting for message output from `sdk_install.dart`
+
 ## 0.9.4
 - Improve and fix path and delimiter handling so works cross platform in `sdk_install.dart`
 - Increment version to v0.9.4
-- Change install steps to only set exec permisions for files on non Windows platforms
+- Change install steps to only set exec permissions for files on non Windows platforms
 - Use `Platform.pathSeparator` in `unzip.dart` to ensure cross platform support
 - Update `CHANGELOG.md` format to improve readability
 

@@ -105,9 +105,9 @@ class SdkVersion {
   /// Uses function [_canUpgrade()] to decide what output to use for any Dart SDK upgrade availability.
   void displayUpgrade() {
     if (_canUpgrade()) {
-      stdout.writeln("\n  [!] Dart SDK upgrade is available.");
+      stdout.writeln("\n [!]  Dart SDK upgrade is available.");
     } else {
-      stdout.writeln("\n  [✔] Installed Dart SDK is the current version.");
+      stdout.writeln("\n [✔]  Installed Dart SDK is the current version.");
     }
   }
 

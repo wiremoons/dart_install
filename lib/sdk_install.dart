@@ -85,7 +85,10 @@ Future<String> dartSdkPath() async {
   // Use [splitChar] as Windows and Unix delimit env PATH with ';' or ':'
   String splitChar = Platform.isWindows ? ";" : ":";
   final envPath = Platform.environment["PATH"]?.split(splitChar);
-  if (envPath == null || envPath.isEmpty) return "";
+  if (envPath == null || envPath.isEmpty) {
+    stderr.writeln("\n  ERROR: no 'PATH' environment variables found.");
+    return "";
+  }
   //
   // final path = envPath.firstWhere((path) => await dartExeExists(path), orElse: () => "");
   //
@@ -119,8 +122,15 @@ Future<bool> dartExeExists(String dirPath) async {
 /// Return the path to a directory to download the new Dart SDK install file into.
 /// Will use [$HOME/scratch] by default - will create it if it does not exist.
 Future<String> setDownLoadPath() async {
-  final homePath = Platform.environment["HOME"];
-  if (homePath == null || homePath.isEmpty) return "";
+  // Account for no 'HOME' environment variable on Windows:
+  final homePath = Platform.isWindows
+      ? Platform.environment["USERPROFILE"]
+      : Platform.environment["HOME"];
+  if (homePath == null || homePath.isEmpty) {
+    stderr.writeln(
+        "\n  ERROR: either '\$HOME' or '%USERPROFILE%' not found in environment variables - deletion failure.");
+    return "";
+  }
   //
   // check for $HOME/scratch - create it if does not exist
   final downLoadPath = p.join(homePath, "scratch");
@@ -136,8 +146,15 @@ Future<String> setDownLoadPath() async {
 /// Provide the path to a directory to extract and install the new Dart SDK archive file into.
 /// Will use [$HOME/.dart] by default - will create if it does not exist.
 Future<String> setSdkInstallDir() async {
-  final homePath = Platform.environment["HOME"];
-  if (homePath == null || homePath.isEmpty) return "";
+  // Account for no 'HOME' environment variable on Windows:
+  final homePath = Platform.isWindows
+      ? Platform.environment["USERPROFILE"]
+      : Platform.environment["HOME"];
+  if (homePath == null || homePath.isEmpty) {
+    stderr.writeln(
+        "\n  ERROR: either '\$HOME' or '%USERPROFILE%' not found in environment variables - deletion failure.");
+    return "";
+  }
   //
   // check for $HOME/.dart - create it if does not exist
   final destSdkDirectory = p.join(homePath, ".dart");
@@ -192,7 +209,7 @@ Future<String> getFileSize(String filePath, int displayDecimals) async {
 /// Perform the download and install of the current 'stable' Dart SDK version.
 /// Requires the current Dart SDK version available is provided to the function as [sdkVersion].
 Future<void> upgradeSdk(String sdkVersion) async {
-  stdout.writeln("\nDart SDK installation starting...");
+  stdout.writeln("\n  >>  Dart SDK installation starting...\n");
   stdout.writeln(" [*]  Installing Dart SDK version: '${sdkVersion}'");
   final String downLoadUrl = createDownLoadUrl(sdkVersion);
   if (downLoadUrl.isEmpty) {
@@ -209,7 +226,7 @@ Future<void> upgradeSdk(String sdkVersion) async {
     // existing Dart SDK found - check with user if should remove first?
     stdout.writeln(
         " [!]  Existing Dart SDK install found: '${existingDartSdkPath}'");
-    if (yesNo(question: "Remove exising Dart SDK installation")) {
+    if (yesNo(question: "Remove existing Dart SDK installation")) {
       stdout.writeln(" [*]  Deleting: ${existingDartSdkPath}");
       try {
         Directory(existingDartSdkPath).deleteSync(recursive: true);
@@ -220,15 +237,27 @@ Future<void> upgradeSdk(String sdkVersion) async {
         return;
       }
     } else {
+      // User responded 'No' to removal of existing Dart SDK install
       stderr.writeln(
           "\n [!] ERROR: unable to upgrade as existing Dart SDK install exists.\n\n");
       return;
     }
   }
-  stdout.writeln(" [*]  Dart SDK download URL: ${downLoadUrl}");
-  stdout.writeln(" [*]  Dart SDk install file: ${sdkInstallFile}");
-  stdout.writeln(" [*]  Dart SDk install directory: ${destSdkDirectory}");
-  stdout.writeln(" [*]  Dart SDK download destination: ${downLoadFilePath}");
+  // Output a summary of key files and locations identified
+  stdout.writeln(" [✔]  Key Dart SDK install parameters:");
+  stdout.writeln(" [*]   > Dart SDK download URL:         ${downLoadUrl}");
+  stdout.writeln(" [*]   > Dart SDk install file:         ${sdkInstallFile}");
+  stdout.writeln(" [*]   > Dart SDk install directory:    ${destSdkDirectory}");
+  stdout.writeln(" [*]   > Dart SDK download destination: ${downLoadFilePath}");
+  // final checks to ensure can proceed
+  if ((downLoadUrl.isEmpty) ||
+      (sdkInstallFile.isEmpty) ||
+      (destSdkDirectory.isEmpty) ||
+      (!downLoadFilePath.contains("scratch"))) {
+    stderr.writeln(
+        "\n\n [!] ERROR: problem detected with the above parameters - Dart SDK install aborted.\n");
+    return;
+  }
   // check for an existing downloaded file - use if exists otherwise download new.
   if (await File(downLoadFilePath).exists()) {
     stdout.writeln(
@@ -263,6 +292,9 @@ Future<void> upgradeSdk(String sdkVersion) async {
         File(p.join(destSdkDirectory, "dart-sdk/bin/utils/gen_snapshot")));
   }
   stdout.writeln(" [✔]  Installation of Dart SDK completed.\n");
+  stdout.writeln("\n  >>  Post Install Suggestions:\n");
   stdout.writeln(
-      "\n [#]  Note: To disable Dart analytics reporting run:  dart --disable-analytics\n");
+      " [#]  To disable Dart analytics reporting run:  dart --disable-analytics");
+  stdout.writeln(
+      " [#]  Ensure Dart SDK is in your PATH:  ${p.join(destSdkDirectory, "dart-sdk", "bin")}\n");
 }

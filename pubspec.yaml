@@ -1,6 +1,6 @@
 name: dart_install
 description: Command-line application to install the Dart SDK.
-version: 0.9.4
+version: 0.9.5
 homepage: https://github.com/wiremoons/dart_install
 
 platforms:
