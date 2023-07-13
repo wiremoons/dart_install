@@ -12,6 +12,9 @@ import 'dart:convert';
 import 'package:http/http.dart' show Client;
 import 'package:path/path.dart' as p;
 
+// import local code
+import 'package:dart_install/sys_utils.dart';
+
 /// URL for current Dart SDK stable release:
 const String _sdkUrl =
     "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION";
@@ -138,7 +141,7 @@ class SdkVersion {
 
   // return the version of any installed Dart SDK or 'Not Found'
   Future<String> _installedSdk() async {
-    String installedSdkPath = await _dartSdkPath();
+    String installedSdkPath = await dartSdkPath();
     if (installedSdkPath.isEmpty) {
       return "Not Found";
     }
@@ -155,60 +158,6 @@ class SdkVersion {
       stderr.writeln('failed to read file: \n${e}');
       return "Not Found";
     }
-  }
-
-  /// Locate the full path to the local Dart SDK installation
-  ///
-  /// Check if the [DART_SDK] environment variable is set which can be used to identify the installed
-  /// Dart SDK location. If this exists, then use it, as it has been manually set, so should be good.
-  /// If no [DART_SDK] env exists, then search the PATH environment for the *dart* or *dart.exe* which if
-  /// available should be in the Dart SDK *bin/* sub directory.
-  Future<String> _dartSdkPath() async {
-    // check if 'DART_SDK' is set and exists
-    final envDartSdkPath = Platform.environment["DART_SDK"];
-    if (envDartSdkPath != null && envDartSdkPath.isNotEmpty) {
-      // Check the dart exe exists in the sub directory 'bin/'
-      if (await _dartExeExists(p.join(envDartSdkPath, "bin"))) {
-        stderr.writeln(
-            " [!]  WARNING: env 'DART_SDK' -> '${envDartSdkPath}' contains no 'dart' executable in the 'bin' subdirectory");
-      }
-      // return what the user set anyway - as they know their computer best...
-      return envDartSdkPath;
-    }
-    //
-    // !!- finding the 'DART_SDK' environment variable failed -!!
-    // next check the environment 'PATH' for a 'dart' or 'dart.exe' file
-    // Use [splitChar] as Windows and Unix delimit env PATH with ';' or ':'
-    String splitChar = Platform.isWindows ? ";" : ":";
-    final envPath = Platform.environment["PATH"]?.split(splitChar);
-    if (envPath == null || envPath.isEmpty) return "";
-    //
-    // final path = envPath.firstWhere((path) => await _dartExeExists(path), orElse: () => "");
-    //
-    // check each environment 'PATH' entry for a dart file - return on first found
-    for (final path in envPath) {
-      if (await _dartExeExists(path)) {
-        // the dart executable is normally in the Dart SDK 'bin/' sub directory - so trim the path
-        // found to provide the root of the Dart SDK location.
-        // Ensure the '/bin' or '\bin' element is managed cross platform
-        String binValue = "${Platform.pathSeparator}bin";
-        final idx = path.lastIndexOf(binValue);
-        // if the '/bin' was found - trim it off otherwise just return the 'dart' binary location
-        return idx == -1 ? path : path.substring(0, idx);
-      }
-    }
-    // nothing worked to locate the Dart SDK - so return an empty string
-    return "";
-  }
-
-  /// Confirm if the dart executable exists in the provided directory path [dirPath].
-  /// Additionally check if executing on Windows so [.exe] can be appended to [dart] first.
-  Future<bool> _dartExeExists(String dirPath) async {
-    // set correct dart executable name as different on Windows
-    final dartExe = Platform.isWindows ? "dart.exe" : "dart";
-    // check of the executable exists at the provided path
-    final dartPath = File(p.join(dirPath, dartExe));
-    return await dartPath.exists();
   }
 
   /// Convert a URL string to a Dart URI.

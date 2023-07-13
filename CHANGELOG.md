@@ -1,3 +1,8 @@
+## 0.9.6
+- move duplicate functions to a single new file `sys_utils.dart`
+- update `sdk_remove.dart`, `sdk_install.dart` and `sdk_version.dart` to remove duplicate function and use new `sys_utils.dart`
+- Increment version to v0.9.6
+
 ## 0.9.5
 - Fix identification of `HOME` location on Windows in `sdk_install.dart` and `sdk_remove.dart`
 - Add error output if `PATH` is empty in `sdk_install.dart` and `sdk_remove.dart`
