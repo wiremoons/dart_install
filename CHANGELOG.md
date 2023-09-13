@@ -1,3 +1,6 @@
+## 0.9.8
+- updated `pubspec.lock` to address two CVEs on dependency package `archive` version 3.3.7
+
 ## 0.9.7
 - updates following upgrade to Dart DSK v3.1.0
 
