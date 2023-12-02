@@ -1,3 +1,7 @@
+## 0.9.9
+- fix lint error following upgrade of Dart SDK 3.2.2
+- update `pubspec.yaml` to add new linter version and updated packages.
+
 ## 0.9.8
 - updated `pubspec.lock` to address two CVEs on dependency package `archive` version 3.3.7
 

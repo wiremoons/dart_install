@@ -2,9 +2,9 @@
 // Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
 // Obtain the current 'stable' Dart SDK 'CHANGELOG.md'.
+library;
 // URL to query for latest available 'stable' version is:
 // https://raw.githubusercontent.com/dart-lang/sdk/stable/CHANGELOG.md
-//
 
 import 'dart:core';
 import 'dart:io';

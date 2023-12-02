@@ -2,6 +2,7 @@
 // Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
 // Obtain the current 'stable' Dart SDK version.
+library;
 // URL to query for latest available 'stable' version is:
 // https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION
 //

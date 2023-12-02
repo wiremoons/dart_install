@@ -2,6 +2,8 @@
 // Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
 /// Install or replace (by re-installation) the current 'stable' Dart SDK version.
+library;
+
 /// URL to download the latest macOS arm64 'stable' version is:
 /// [https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.5/sdk/dartsdk-macos-arm64-release.zip]
 /// where the version shown [2.18.5] will be replaced when the SDK version is updated.

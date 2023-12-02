@@ -7,7 +7,7 @@
 /// user can respond with a 'yes' or 'no' response. Accepts different
 /// forms of 'yes' or 'no' to suit the user preferred approach to
 /// answering.
-//
+library;
 
 import 'dart:io';
 

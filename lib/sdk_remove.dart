@@ -2,7 +2,7 @@
 // Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
 /// Remove the Dart SDK installation and the supporting cache files.
-//
+library;
 
 // Disable some specific linting rules in this file only
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_string_interpolations

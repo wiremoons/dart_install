@@ -1,6 +1,8 @@
 //
 // Copyright 2023 Simon Rowe (simon@wiremoons.com).
 //
+/// Unzip an archive file
+library;
 
 import 'dart:io';
 import 'package:archive/archive_io.dart';
